@@ -6,7 +6,8 @@ html, body, nav, #main-content {
 }
 
 body {
-  background-color: #282c34;
+  background-color: #fdfdfd;
+  color: #21252b;
 }
 
 nav#main-nav {
@@ -16,7 +17,6 @@ nav#main-nav {
 }
 nav#main-nav ul {
   list-style-type: none;
-  width: 34px;
   min-height: 100%;
   height: 100%;
   background-color: #21252b;
@@ -25,11 +25,10 @@ nav#main-nav ul {
 }
 nav#main-nav ul li a {
   color: #c9c9c9;
-  font-size: 22px;
+  font-size: 20px;
   text-align: center;
   float: left;
   display: block;
-  width: 34px;
   line-height: 1;
   padding: 6px;
   text-decoration: none;
@@ -39,23 +38,10 @@ nav#main-nav ul li a {
 nav#main-nav ul li a:hover {
   text-decoration: none;
 }
-nav#main-nav ul li a:hover .label {
-  display: block;
-}
-nav#main-nav ul li a.bottom {
+nav#main-nav ul.bottom {
   position: absolute;
   bottom: 0px;
   left: 0px;
-}
-nav#main-nav ul li a .label {
-  position: absolute;
-  top: 0px;
-  left: 34px;
-  background-color: #21252b;
-  height: 34px;
-  padding: 6px 15px 0px;
-  box-sizing: border-box;
-  display: none;
 }
 
 /*# sourceMappingURL=main.css.map */

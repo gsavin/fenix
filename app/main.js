@@ -1,7 +1,16 @@
 'use strict';
 
-var app = require('app');
-var BrowserWindow = require('browser-window');
+var fenix = require('./lib/fenix.js');
+
+try {
+  fenix.loadDb();
+} catch(e) {
+  console.log(e);
+}
+
+var app = require('app')
+  , BrowserWindow = require('browser-window')
+  , dialog = require('dialog');
 
 //
 // Keep a global reference of the window object, if you don't, the window will

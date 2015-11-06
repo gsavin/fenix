@@ -1,9 +1,15 @@
-$mainBg:         #282c34;
-$darkBg:         #21252b;
-$navFg:          #efefef;
+$mainBg:     #282c34;
+$dark-color: #21252b;
+
+$body-bg: #fdfdfd;
+$body-fg: $dark-color;
+
+$nav-bg:      $dark-color;
+$nav-fg:      #efefef;
+$nav-width:   34px;
+$nav-padding: 6px;
+
 $highlightColor: #23527c;
-$navWidth:       34px;
-$navPadding:     6px;
 
 html, body, nav, #main-content {
   min-height: 100%;
@@ -13,7 +19,8 @@ html, body, nav, #main-content {
 }
 
 body {
-  background-color: $mainBg;
+  background-color: $body-bg;
+  color: $body-fg;
 }
 
 nav#main-nav {
@@ -23,52 +30,38 @@ nav#main-nav {
 
   ul {
     list-style-type: none;
-    width: $navWidth;
     min-height: 100%;
     height:100%;
-    background-color: $darkBg;
+    background-color: $nav-bg;
     padding-left: 0px;
     margin: 0px;
 
     li {
       a {
-        color: darken($navFg, 15%);
-        font-size: $navWidth - 2 * $navPadding;
+        color: darken($nav-fg, 15%);
+        font-size: 20px;
         text-align: center;
         float: left;
         display:block;
-        width: $navWidth;
         line-height: 1;
-        padding: $navPadding;
+        padding: $nav-padding;
         text-decoration: none;
         box-sizing: border-box;
         position: relative;
 
         &:hover {
           text-decoration: none;
-
-          .label {
-            display: block;
-          }
-        }
-
-        &.bottom {
-          position: absolute;
-          bottom: 0px;
-          left: 0px;
         }
 
         .label {
-          position: absolute;
-          top: 0px;
-          left: $navWidth;
-          background-color: $darkBg;
-          height: $navWidth;
-          padding: $navPadding 15px 0px;
-          box-sizing: border-box;
-          display:none;
         }
       }
+    }
+
+    &.bottom {
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
     }
   }
 }
