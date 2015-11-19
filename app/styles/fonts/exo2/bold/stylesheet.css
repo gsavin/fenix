@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Exo 2';
+    src: url('Exo2.0-Bold-webfont.eot');
+    src: url('Exo2.0-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Exo2.0-Bold-webfont.woff') format('woff'),
+         url('Exo2.0-Bold-webfont.ttf') format('truetype'),
+         url('Exo2.0-Bold-webfont.svg#exo_2.0bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+

@@ -16,6 +16,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     jade: {
       compile: {
         options: {
@@ -25,7 +26,8 @@ module.exports = function(grunt) {
           pretty: true
         },
         files: {
-          "app/views/main.html": "app/src/views/main.jade"
+          "app/default.html":             "app/src/views/default.jade",
+          "app/views/partials/main.html": "app/src/views/partials/main.jade"
         }
       }
     }

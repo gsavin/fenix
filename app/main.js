@@ -1,13 +1,5 @@
 'use strict';
 
-var fenix = require('./lib/fenix.js');
-
-try {
-  fenix.loadDb();
-} catch(e) {
-  console.log(e);
-}
-
 var app = require('app')
   , BrowserWindow = require('browser-window')
   , dialog = require('dialog');
@@ -32,8 +24,15 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({width: 800, height: 600});
-  mainWindow.loadUrl('file://' + __dirname + '/views/main.html');
+  var menu = require('./lib/controllers/menu.js');
+
+  mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 720
+  });
+
+  mainWindow.loadUrl('file://' + __dirname + '/default.html');
+  mainWindow.setMenu(menu);
 
   mainWindow.on('closed', function() {
     //
