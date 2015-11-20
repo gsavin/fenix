@@ -1,4 +1,4 @@
-html, body, nav, #main-content {
+html, body, #container {
   min-height: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -8,12 +8,18 @@ html, body, nav, #main-content {
 body {
   background-color: #282c34;
   color: #efefef;
+  font-family: "Exo 2.0";
+}
+
+#container {
+  display: flex;
+  flex-direction: row;
 }
 
 nav#main-nav {
-  position: fixed;
-  top: 0px;
-  left: 0px;
+  /*position:fixed;
+  top:0px;
+  left:0px;*/
 }
 nav#main-nav ul {
   list-style-type: none;

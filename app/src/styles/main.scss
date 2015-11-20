@@ -9,7 +9,9 @@ $nav-fg:      #efefef;
 
 $highlightColor: #23527c;
 
-html, body, nav, #main-content {
+$default-font: 'Exo 2.0';
+
+html, body, #container {
   min-height: 100%;
   height:100%;
   box-sizing: border-box;
@@ -19,12 +21,19 @@ html, body, nav, #main-content {
 body {
   background-color: $body-bg;
   color: $body-fg;
+
+  font-family: $default-font;
+}
+
+#container {
+  display: flex;
+  flex-direction: row;
 }
 
 nav#main-nav {
-  position:fixed;
+  /*position:fixed;
   top:0px;
-  left:0px;
+  left:0px;*/
 
   ul {
     list-style-type: none;

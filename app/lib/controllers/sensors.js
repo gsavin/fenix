@@ -1,7 +1,8 @@
 'use strict';
 
 var mongoose = require('mongoose')
-  , Sensor   = mongoose.model('Sensor');
+  , Sensor   = mongoose.model('Sensor')
+  , fenix    = require('../fenix.js');
 
 class SensorCtrl {
   constructor() {
@@ -20,6 +21,8 @@ class SensorCtrl {
       function (resolve, reject) {
         var stream = Sensor.find({}).stream()
           , errors = [];
+
+        fenix.logger.debug("list sensors");
 
         stream
         .on('data', function(sensor) {

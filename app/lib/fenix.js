@@ -3,15 +3,28 @@
 var config   = require('./config')
   , fs       = require('fs')
   , path     = require('path')
-  , mongoose = require('mongoose');
+  , mongoose = require('mongoose')
+  , winston  = require('winston');
 
 const MODULES = ['sensors'];
+const COMPONENTS = ['sensors-list'];
 
 class FenixApp {
   constructor() {
     this.config = config;
     this.loaded = false;
     this.modules = {};
+
+    this._logger = new (winston.Logger)({
+      level: 'debug',
+      transports: [
+        new (winston.transports.Console)(),
+      ]
+    });
+  }
+
+  get logger() {
+    return this._logger;
   }
 
   init() {
@@ -36,7 +49,7 @@ class FenixApp {
     var modelsPath = path.join(__dirname, 'models');
     fs.readdirSync(modelsPath).forEach(function (file) {
       if (/(.*)\.(js$|coffee$)/.test(file)) {
-        require(modelsPath + '/' + file);
+        require(path.join(modelsPath, file));
       }
     });
 
@@ -47,10 +60,31 @@ class FenixApp {
      */
 
     MODULES.forEach(name => {
-     let mod = require(`./modules/${name}.js`);
-     this.modules[name] = mod;
+      try {
+       let mod = require(`./modules/${name}.js`);
+       this.modules[name] = mod;
 
-     mod.init();
+       mod.init();
+
+       this.logger.debug(`module "./modules/${name}.js" loaded`);
+     }
+     catch(err) {
+       this.logger.error(`failed to load "./modules/${name}.js"`, err);
+     }
+   });
+
+    /*
+     * Loading components...
+     */
+
+    COMPONENTS.forEach(name => {
+      try {
+        require(`./components/${name}.js`);
+        this.logger.debug(`components "./components/${name}.js" loaded`);
+      }
+      catch(err) {
+        this.logger.error(`failed to load "./components/${name}.js"`, err);
+      }
     });
 
     /*
@@ -88,8 +122,6 @@ class FenixApp {
         //controller: 'MapCtrl'
       });
     }]);
-
-    require('./components/sensors_list.js');
 
     return this;
   }

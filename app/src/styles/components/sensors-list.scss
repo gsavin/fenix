@@ -1,0 +1,14 @@
+fx-sensors-list {
+  display: flex;
+  flex-direction: column;
+
+  font-weight: 300;
+
+  fx-sensor {
+    padding: 3px;
+    &:before {
+      content: "\f0e4";
+      font-family: 'FontAwesome';
+    }
+  }
+}

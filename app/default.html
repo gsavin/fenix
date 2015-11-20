@@ -6,16 +6,19 @@
     <link rel="stylesheet" href="styles/font-awesome.min.css">
     <link rel="stylesheet" href="styles/fonts/exo2/stylesheet.css">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
   </head>
   <body data-ng-app="fenix">
-    <nav id="main-nav">
-      <ul>
-        <li><a href="#"><i class="fa fa-fw fa-tasks"></i><span class="label">Listes</span></a></li>
-        <li><a href="#"><i class="fa fa-fw fa-plus-circle"></i><span class="label">Nouveau</span></a></li>
-        <li><a href="#"><i class="fa fa-fw fa-cogs"></i><span class="label">Paramètres</span></a></li>
-      </ul>
-    </nav>
-    <div id="main-content" data-ng-view=""></div>
+    <div id="container">
+      <nav id="main-nav">
+        <ul>
+          <li><a href="#"><i class="fa fa-fw fa-tasks"></i><span class="label">Listes</span></a></li>
+          <li><a href="#"><i class="fa fa-fw fa-plus-circle"></i><span class="label">Nouveau</span></a></li>
+          <li><a href="#"><i class="fa fa-fw fa-cogs"></i><span class="label">Paramètres</span></a></li>
+        </ul>
+      </nav>
+      <div id="main-content" data-ng-view=""></div>
+    </div>
     <script src="lib/init.js"></script>
   </body>
 </html>

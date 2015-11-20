@@ -14,21 +14,6 @@
   try {
     fenix.init();
   } catch(e) {
-    console.log(e);
+    fenix.logger.error(e);
   }
-
-  var sensors = fenix.modules['sensors'];
-  sensors.on('new-sensor', function(sensor) {
-    console.log(`new sensor "${sensor.identifiant}"`);
-  });
-
-  sensors.controller.list(function(sensor) {
-    console.log(`- ${sensor.identifiant}`);
-  })
-  .then(function() {
-    console.log("fin de la liste");
-  })
-  .catch(function(err) {
-    console.log("erreur de liste", err);
-  });
 })();

@@ -9,9 +9,12 @@ html(lang="en")
     link(rel="stylesheet", href="styles/font-awesome.min.css")
     link(rel="stylesheet", href="styles/fonts/exo2/stylesheet.css")
     link(rel="stylesheet", href="styles/main.css")
+    link(rel="stylesheet", href="styles/components.css")
 
   body(data-ng-app="fenix")
-    include ./includes/nav.jade
+    div#container
+      include ./includes/nav.jade
 
-    div#main-content(data-ng-view="")
+      div#main-content(data-ng-view="")
+    
     script(src="lib/init.js")
