@@ -19,28 +19,19 @@ class SensorCtrl {
   list (action) {
     return new Promise(
       function (resolve, reject) {
-        var stream = Sensor.find({}).stream()
-          , errors = [];
+        fenix.logger.debug("launch find on Sensor model", fenix.db.readyState);
 
-        fenix.logger.debug("list sensors");
-
-        stream
-        .on('data', function(sensor) {
-          action(sensor);
-        })
-        .on('error', function(err) {
-          errors.append(err);
-        })
-        .on('close', function() {
-          if (errors.length > 0 ) {
-            reject(errors);
+        Sensor.find().exec(function(err, sensors) {
+          if (err) {
+            reject(err);
           }
           else {
+            fenix.logger.debug(sensors.length);
+            action(sensors);
             resolve();
           }
         });
-      }
-    );
+      });
   }
 
   /**
@@ -91,6 +82,25 @@ class SensorCtrl {
     );
   }
 
+  get (id) {
+    return new Promise(
+      function (resolve, reject) {
+        Sensor.findOne({_id: id}, function(err, sensor) {
+          if (err) {
+            reject(err);
+          }
+          else {
+            if (sensor) {
+              resolve(sensor);
+            }
+            else {
+              reject("not found");
+            }
+          }
+        });
+      }
+    );
+  }
 
   /**
    * Delete a sensor with the given id.

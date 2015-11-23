@@ -5,10 +5,25 @@ fx-sensors-list {
   font-weight: 300;
 
   fx-sensor {
-    padding: 3px;
-    &:before {
-      content: "\f0e4";
-      font-family: 'FontAwesome';
+    padding: 8px;
+    border-radius: 4px;
+
+    i {
+      margin-right: 10px;
+    }
+    /*&:before {
+      content: "\f192";
+      padding-right: 5px;
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }*/
+
+    &:hover {
+      background-color: #21B384;
     }
   }
 }

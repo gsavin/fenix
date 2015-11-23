@@ -1,6 +1,6 @@
 {
 "version": 3,
-"mappings": "AAAA,eAAgB;EACd,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EAEtB,WAAW,EAAE,GAAG;;AAEhB,yBAAU;EACR,OAAO,EAAE,GAAG;;AACZ,gCAAS;EACP,OAAO,EAAE,OAAO;EAChB,WAAW,EAAE,aAAa",
+"mappings": "AAAA,eAAgB;EACd,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EAEtB,WAAW,EAAE,GAAG;;AAEhB,yBAAU;EACR,OAAO,EAAE,GAAG;EACZ,aAAa,EAAE,GAAG;;;;;;;;;;;;AAElB,2BAAE;EACA,YAAY,EAAE,IAAI;;AAapB,+BAAQ;EACN,gBAAgB,EAAE,OAAO",
 "sources": ["../src/styles/components/sensors-list.scss"],
 "names": [],
 "file": "components.css"

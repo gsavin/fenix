@@ -4,11 +4,24 @@ fx-sensors-list {
   font-weight: 300;
 }
 fx-sensors-list fx-sensor {
-  padding: 3px;
+  padding: 8px;
+  border-radius: 4px;
+  /*&:before {
+    content: "\f192";
+    padding-right: 5px;
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }*/
 }
-fx-sensors-list fx-sensor:before {
-  content: "\f0e4";
-  font-family: 'FontAwesome';
+fx-sensors-list fx-sensor i {
+  margin-right: 10px;
+}
+fx-sensors-list fx-sensor:hover {
+  background-color: #21B384;
 }
 
 /*# sourceMappingURL=components.css.map */

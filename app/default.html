@@ -7,12 +7,20 @@
     <link rel="stylesheet" href="styles/fonts/exo2/stylesheet.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
+    <template id="template-sensor-panel">
+      <h1 class="sensor-identifiant"></h1>
+      <h4 class="sensor-id"></h4>
+    </template>
   </head>
   <body data-ng-app="fenix">
     <div id="container">
       <nav id="main-nav">
         <ul>
-          <li><a href="#"><i class="fa fa-fw fa-tasks"></i><span class="label">Listes</span></a></li>
+          <li><a href="#" class="submenu-opener"><i class="fa fa-fw fa-tasks"></i><span class="label">Sensors</span></a>
+            <div class="submenu">
+              <fx-sensors-list></fx-sensors-list>
+            </div>
+          </li>
           <li><a href="#"><i class="fa fa-fw fa-plus-circle"></i><span class="label">Nouveau</span></a></li>
           <li><a href="#"><i class="fa fa-fw fa-cogs"></i><span class="label">Paramètres</span></a></li>
         </ul>

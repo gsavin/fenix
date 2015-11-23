@@ -1,37 +1,41 @@
 'use strict';
 
-var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    register = function(tagName, element) {return document.registerElement(tagName, {prototype: element.prototype});};
+function _register(tagName, proto) {
+  return document.registerElement(tagName, {prototype: proto});
+}
 
 var fenix = require('../fenix.js');
 
-__extends(Sensor, HTMLElement);
-__extends(SensorsList, HTMLElement);
+var SensorPrototype      = Object.create(HTMLElement.prototype)
+  , SensorsListPrototype = Object.create(HTMLElement.prototype);
 
-function Sensor() {
-  return Sensor.__super__.constructor.apply(this, arguments);
-}
-
-Sensor.prototype.init = function(model) {
+SensorPrototype.init = function(model) {
   this.dataset.id = model._id;
-  this.textContent = model.identifiant;
+  this.innerHTML = '<i class="fa fa-dot-circle-o"></i>' + model.identifiant;
 };
 
-var SensorElement = register('fx-sensor', Sensor);
+SensorPrototype.createdCallback = function() {
+  this.addEventListener('click', e => {
+    e.preventDefault();
+    fenix.logger.debug("click on:", this.dataset.id);
 
-function SensorsList() {
-  return SensorsList.__super__.constructor.apply(this, arguments);
-}
+    var sensorPanel = document.querySelector("fx-sensor-panel");
+    sensorPanel.dataset.sensorId = this.dataset.id;
+  });
+};
 
-SensorsList.prototype.ping = function() {
+var SensorElement = _register('fx-sensor', SensorPrototype);
+
+SensorsListPrototype.ping = function() {
   console.log("pong");
 };
 
-SensorsList.prototype.createdCallback = function() {
+SensorsListPrototype.createdCallback = function() {
   fenix.logger.info("sensors-list created");
 
   fenix.modules['sensors'].on('sensor-updated', sensor => {
+    fenix.logger.info("sensor-updated");
+
     var sensorElement = this.querySelector(`[data-id='${sensors._id}']`);
 
     if (sensorElement) {
@@ -46,6 +50,8 @@ SensorsList.prototype.createdCallback = function() {
   });
 
   fenix.modules['sensors'].on('sensor-removed', sensor => {
+    fenix.logger.info("sensor-removed");
+
     var sensorElement = this.querySelector(`[data-id='${sensors._id}']`);
 
     if (sensorElement) {
@@ -53,30 +59,26 @@ SensorsList.prototype.createdCallback = function() {
     }
   });
 
-  fenix.modules['sensors'].controller.list(sensor => {
-    var sensorElement = new SensorElement();
-    sensorElement.init(sensor);
+  fenix.modules['sensors'].controller.list(sensors => {
+    sensors.forEach(sensor => {
+      var sensorElement = new SensorElement();
+      sensorElement.init(sensor);
 
-    this.appendChild(sensorElement);
-  })
-  .then(function() {
-    fenix.logger.debug("listing ends");
-  })
-  .catch(function(err) {
-    fenix.logger.error("while listing sensors", err);
+      this.appendChild(sensorElement);
+    });
   });
 };
 
-SensorsList.prototype.attachedCallback = function() {
+SensorsListPrototype.attachedCallback = function() {
   fenix.logger.info("sensors-list attached");
 };
 
-SensorsList.prototype.detachedCallback = function() {
+SensorsListPrototype.detachedCallback = function() {
   fenix.logger.info("sensors-list detached");
 };
 
-SensorsList.prototype.attributeChangedCallback = function() {
-  fenix.logger.info("sensors-list attribute changed");
+SensorsListPrototype.attributeChangedCallback = function(attrName, oldVal, newVal) {
+  fenix.logger.info("sensors-list attribute " + attrName + " changed to", newVal);
 };
 
-module.exports = register('fx-sensors-list', SensorsList);
+module.exports = _register('fx-sensors-list', SensorsListPrototype);
