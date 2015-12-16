@@ -11,6 +11,10 @@ module.exports = {
 
   SESSION_SECRET: '1b53bf3bb05e113e75b8',
 
+  logger: {
+    level: 'info'
+  },
+
   db: {
     DB_OPTIONS: {
       db: {

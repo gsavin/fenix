@@ -4,9 +4,9 @@ var config   = require('./config')
   , fs       = require('fs')
   , path     = require('path')
   , mongoose = require('mongoose')
-  , winston  = require('winston');
+  , logger   = require('./logger.js');
 
-const MODULES = ['sensors'];
+const MODULES = ['sensors', 'view-utils'];
 const COMPONENTS = ['sensors-list', 'sensor-panel'];
 
 function initFenixApp(fenix) {
@@ -130,12 +130,7 @@ class FenixApp {
     this.loaded = false;
     this.modules = {};
 
-    this._logger = new (winston.Logger)({
-      level: 'debug',
-      transports: [
-        new (winston.transports.Console)(),
-      ]
-    });
+    this._logger = logger;
   }
 
   get logger() {

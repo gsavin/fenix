@@ -1,3 +1,59 @@
+nav#main-nav {
+  /*position:fixed;
+  top:0px;
+  left:0px;*/
+  height: 100%;
+}
+nav#main-nav ul {
+  list-style-type: none;
+  min-height: 100%;
+  height: 100%;
+  background-color: #21252b;
+  padding-left: 0px;
+  margin: 0px;
+}
+nav#main-nav ul li {
+  display: block;
+  color: #c9c9c9;
+  font-family: 'Exo 2';
+  font-weight: 300;
+  font-size: 16px;
+  border-bottom: 1px solid #2c3139;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  line-height: 1;
+}
+nav#main-nav ul li a {
+  color: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  box-sizing: border-box;
+  width: 100%;
+  display: block;
+  padding: 20px 20px 20px 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+nav#main-nav ul li a i {
+  font-size: 125%;
+}
+nav#main-nav ul li a:hover {
+  text-decoration: none;
+  background-color: #23527c;
+}
+nav#main-nav ul li a .label {
+  padding: 0px 10px;
+}
+nav#main-nav ul li .submenu {
+  background-color: #282c34;
+  display: none;
+}
+nav#main-nav ul li .submenu.opened {
+  display: block;
+}
+
 fx-sensors-list {
   display: flex;
   flex-direction: column;

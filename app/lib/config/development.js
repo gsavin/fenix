@@ -9,6 +9,10 @@ module.exports = {
 
   CHECK_ADMIN_ACCOUNT: true,
 
+  logger: {
+    level: 'debug'
+  },
+
   db: {
     DB_URI: 'mongodb://localhost/firediag-development',
     DB_NAME: 'firediag-development'

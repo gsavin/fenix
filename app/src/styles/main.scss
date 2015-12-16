@@ -1,15 +1,4 @@
-$mainBg:     #282c34;
-$dark-color: #21252b;
-
-$body-bg: #282c34;
-$body-fg: #efefef;
-
-$nav-bg:      $dark-color;
-$nav-fg:      #efefef;
-
-$highlightColor: #23527c;
-
-$default-font: 'Exo 2.0';
+@import 'theme';
 
 html, body, #container {
   min-height: 100%;
@@ -28,67 +17,4 @@ body {
 #container {
   display: flex;
   flex-direction: row;
-}
-
-nav#main-nav {
-  /*position:fixed;
-  top:0px;
-  left:0px;*/
-  height: 100%;
-
-  ul {
-    list-style-type: none;
-    min-height: 100%;
-    height:100%;
-    background-color: $nav-bg;
-    padding-left: 0px;
-    margin: 0px;
-
-    li {
-      display:block;
-
-      color: darken($nav-fg, 15%);
-      font-family: 'Exo 2';
-      font-weight: 300;
-      font-size: 16px;
-
-      border-bottom: 1px solid lighten($nav-bg, 5%);
-      width: 100%;
-      box-sizing: border-box;
-      text-align: left;
-      line-height: 1;
-
-      a {
-        color: inherit;
-        font-family: inherit;
-        font-weight: inherit;
-        font-size: inherit;
-        box-sizing: border-box;
-        width: 100%;
-        display:block;
-
-        padding: 20px 20px 20px 10px;
-
-        text-transform: uppercase;
-        text-decoration: none;
-
-        i {
-          font-size: 125%;
-        }
-
-        &:hover {
-          text-decoration: none;
-          background-color: $highlightColor;
-        }
-
-        .label {
-          padding: 0px 10px;
-        }
-      }
-
-      .submenu {
-        background-color: $body-bg;
-      }
-    }
-  }
 }

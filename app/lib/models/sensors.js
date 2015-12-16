@@ -48,10 +48,7 @@ var SensorDataSchema = new Schema({
   /**
    * Valeurs du capteur, par unité de précision.
    */
-  data: [{
-    value: Number,
-    validity: Number
-  }],
+  data: [Number],
 
   /**
    * Informations additionnelles sur ce jeu de données.
