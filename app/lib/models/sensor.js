@@ -32,34 +32,9 @@
  */
 'use strict';
 
-var mongoose = require('mongoose'),
-    Schema   = mongoose.Schema;
-
-/**
- * Schéma d'un jeu de données pour une unité de temps.
- */
-var SensorDataSchema = new Schema({
-
-  /**
-   * L'étiquette temporelle, arrondie à l'unité de découpe.
-   */
-  timestamp: Date,
-
-  /**
-   * Valeurs du capteur, par unité de précision.
-   */
-  data: [Number],
-
-  /**
-   * Informations additionnelles sur ce jeu de données.
-   */
-  metadata: [{
-    name: String,
-    value: Schema.Types.Mixed
-  }]
-});
-
-mongoose.model('SensorData', SensorDataSchema);
+const mongoose   = require('mongoose')
+    , Schema     = mongoose.Schema
+    , SensorData = require('./sensor-data.js');
 
 var SensorSchema = new Schema({
   identifiant: {
@@ -68,29 +43,15 @@ var SensorSchema = new Schema({
     required: true,
     index:    true
   },
-  data: [SensorDataSchema],
+  data: [SensorData.schema],
   metadata: [{
    name: String,
    value: Schema.Types.Mixed
   }]
 });
 
-mongoose.model('Sensor', SensorSchema);
+SensorSchema.methods.addData = function(time, value) {
+  
+};
 
-var SensorSetSchema = new Schema({
-  identifiant: {
-      type:     String,
-      unique:   true,
-      required: true,
-      index:    true
-  },
-
-  sensors: [SensorSchema],
-
-  metadata: [{
-   name: String,
-   value: Schema.Types.Mixed
-  }]
-});
-
-mongoose.model('SensorSet', SensorSetSchema);
+module.exports = mongoose.model('Sensor', SensorSchema);

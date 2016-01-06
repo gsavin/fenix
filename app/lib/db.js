@@ -42,6 +42,12 @@ class FenixDB {
     })
   }
   
+  close() {
+    if (this._db) {
+      this._db.close();
+    }
+  }
+  
   loadModels(modelsPath) {
     fs.readdirSync(modelsPath).forEach(file => {
       if (/(.*)\.(js$|coffee$)/.test(file)) {
