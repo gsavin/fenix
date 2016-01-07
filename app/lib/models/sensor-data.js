@@ -1,7 +1,8 @@
 'use strict';
 
-const mongoose = require('mongoose')
-    , Schema   = mongoose.Schema;
+const mongoose        = require('mongoose')
+    , Schema          = mongoose.Schema
+    , SensorDataChunk = require('./sensor-data-chunk.js');
 
 /**
  * Schéma d'un jeu de données pour une unité de temps.
@@ -16,7 +17,8 @@ var SensorDataSchema = new Schema({
   /**
    * Valeurs du capteur, par unité de précision.
    */
-  data: [Number],
+  chunkResolutions: [Number],
+  chunks: SensorDataChunk,
 
   /**
    * Informations additionnelles sur ce jeu de données.
