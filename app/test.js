@@ -23,8 +23,10 @@ mongoose.connection.on('error', err => {
 
 mongoose.connection.once('connected', () => {
   var SensorDataChunk = require('./lib/models/sensor-data-chunk.js')
-    , resolutions = [3600000, 60000, 1000, 10]
+    , resolutions = [3600000, 60000, 1000, 100]
     , root = new SensorDataChunk({
       resolution: resolutions
     });
+  
+  console.log(SensorDataChunk.computeResolutions(5, [5, 4, 3, 2]));
 });
