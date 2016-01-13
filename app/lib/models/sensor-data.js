@@ -8,17 +8,12 @@ const mongoose        = require('mongoose')
  * Schéma d'un jeu de données pour une unité de temps.
  */
 var SensorDataSchema = new Schema({
+  timestamp: {
+    type: Date,
+    required: true
+  },
 
-  /**
-   * L'étiquette temporelle, arrondie à l'unité de découpe.
-   */
-  timestamp: Date,
-
-  /**
-   * Valeurs du capteur, par unité de précision.
-   */
-  chunkResolutions: [Number],
-  chunks: SensorDataChunk,
+  chunks: SensorDataChunk.schema,
 
   /**
    * Informations additionnelles sur ce jeu de données.

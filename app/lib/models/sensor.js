@@ -50,8 +50,4 @@ var SensorSchema = new Schema({
   }]
 });
 
-SensorSchema.methods.addData = function(time, value) {
-  
-};
-
 module.exports = mongoose.model('Sensor', SensorSchema);

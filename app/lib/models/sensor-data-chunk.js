@@ -5,8 +5,26 @@ const mongoose = require('mongoose')
 
 var SensorDataChunkModel = false;
 
+/**
+ * SensorDataChunk are documents storing data values.
+ *
+ * Transactions with the database have a cost, and we try to reduce them. Storing
+ * all data in a single document implies to update a large amount of data. So, we
+ * divide each chunk into subchunks recursively according to a given subdivisions
+ * pattern. When putting data into the root chunk, we find the subchunk corresponding
+ * to the timestamp and put the data inside, so we just have to update this subdocument.
+ *
+ * Subdivisions pattern is composed of a frequency (it will be the number of values
+ * per second) and the number of subdivisions for each level of chunks.
+ *
+ * For example, we consider a frequency of 5Hz and we want 2 levels of chunks,
+ * with 5-subdivisions, and 4-subdivisions. The root chunk will contain as subchunks
+ * as necessary. Then subchunks at root+1 level will contain 4 subchunks, and
+ * subchunks at root+2 level will contain 5 subchunks.
+ * 
+ */
 var SensorDataChunkSchema = new Schema({
-  resolution: {
+  resolutions: {
     type: [Number],
     required: true
   },
@@ -17,6 +35,10 @@ var SensorDataChunkSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref:  'SensorDataChunk'
   }]
+});
+
+SensorDataChunkSchema.virtual('resolution').get(function() {
+  return this.resolutions[0];
 });
 
 function handleSaveError(err) {
@@ -64,43 +86,56 @@ SensorDataChunkSchema.statics.createRoot = function(freq, subdivisions) {
   let resolutions = computeResolutions(freq, subdivisions);
   
   return new SensorDataChunkModel({
-    resolution: resolutions
+    resolutions: resolutions
   });
 };
 
 SensorDataChunkSchema.methods.getSubChunk = function(idx) {
   let sub = this.subchunks[idx];
   
-  // TODO
+  if (!sub) {
+    this.subchunks[idx] = sub = new SensorDataChunkModel({
+      resolutions: this.resolutions.slice(1)
+    });
+    
+    sub.save(handleSaveError);
+  }
+  
+  return sub;
+};
+
+SensorDataChunkSchema.methods.isLeaf = function() {
+  return this.resolutions.length == 1;
 };
 
 SensorDataChunkSchema.methods.prepareSubChunks = function(maxTime) {
   let i = 0;
   
-  while (maxTime > 0) {
-    let sub = this.subchunks[i];
-    
-    if (!sub) {
-      this.subchunks[i] = sub = new
+  if (!this.isLeaf()) {
+    while (maxTime > 0) {
+      let sub = this.getSubChunk(i++);
+      sub.prepareSubChunks(Math.min(maxTime, this.resolution));
+      
+      maxTime -= this.resolution;
     }
   }
 };
 
 SensorDataChunkSchema.methods.putData = function(time, value) {
-  if (this.resolution.length == 1) {
-    time = Math.floor(time / this.resolution[0]);
+  if (this.resolutions.length == 1) {
+    time = Math.floor(time / this.resolution);
     
     this.values[time] = value;
     this.save(handleSaveError);
   }
   else {
-    let i = Math.floor(time / this.resolution[0])
-      , t = time - i * this.resolution[0]
+    let i = Math.floor(time / this.resolution)
+      , t = time - i * this.resolution
       , d = this.subchunks[i];
     
     if (!d) {
       d = new SensorDataChunkModel({
-        resolution: this.resolution.slice(1)
+        resolutions: this.resolutions.slice(1)
       });
       
       d.save(handleSaveError);
