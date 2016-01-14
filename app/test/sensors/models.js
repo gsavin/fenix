@@ -2,7 +2,14 @@
 
 const utils           = require('../utils')
     , should          = require('should')
-    , SensorDataChunk = require('../../lib/models/sensor-data-chunk.js');
+    , SensorDataChunk = require('../../lib/models/sensor-data-chunk.js')
+    , SensorData      = require('../../lib/models/sensor-data.js')
+    , Sensor          = require('../../lib/models/sensor.js')
+    , SensorSet       = require('../../lib/models/sensor-set.js');
+
+//
+// SensorDataChunk Schema
+//
 
 describe('SensorDataChunks: models', function() {
   describe('#computeResolutions()', function() {
@@ -24,6 +31,7 @@ describe('SensorDataChunks: models', function() {
 
       SensorDataChunk.create(sdc, function (err, createdChunk) {
         should.not.exist(err);
+        should.exist(createdChunk);
 
         createdChunk.should.have.property('resolution');
         createdChunk.should.have.property('values')
@@ -125,6 +133,112 @@ describe('SensorDataChunks: models', function() {
       root.subchunks[1].subchunks[0].values[4].should.equal(13.37);
       
       done();
+    });
+  });
+});
+
+//
+// SensorData Schema
+//
+
+describe('SensorData: models', function() {
+  describe('#create()', function () {
+    it('should create a new SensorData', function (done) {
+      let now = new Date();
+      
+      let sd = {
+        timestamp: now
+      };
+
+      SensorData.create(sd, function (err, createdData) {
+        should.not.exist(err);
+
+        done();
+      });
+    });
+    
+    it('should not create a new SensorData (missing timestamp)', function (done) {
+      SensorData.create({}, function(err, createdData) {
+        should.exist(err);
+        done();
+      });
+    });
+  });
+});
+
+//
+// Sensor Schema
+//
+
+describe('Sensor: models', function() {
+  describe('#create()', function () {
+    it('should create a new Sensor', function (done) {
+      let s = {
+        identifiant: "test-sensor"
+      };
+
+      Sensor.create(s, function (err, createdData) {
+        should.not.exist(err);
+        done();
+      });
+    });
+    
+    it('should not create a new Sensor (existing id)', function (done) {
+      let s = {
+        identifiant: "test-sensor"
+      };
+
+      Sensor.create(s, function (err, createdData) {
+        Sensor.create(s, function (err, createdData) {
+          should.exist(err);
+          done();
+        });
+      });
+    });
+  });
+});
+
+//
+// SensorSet Schema
+//
+
+describe('SensorSet: models', function() {
+  describe('#create()', function () {
+    it('should create a new SensorSet', function (done) {
+      let s = {
+        identifiant: "test-sensor-set"
+      };
+
+      SensorSet.create(s, function (err, createdData) {
+        should.not.exist(err);
+        done();
+      });
+    });
+    
+    it('should not create a new SensorSet (missing id)', function (done) {
+      SensorSet.create({}, function (err, createdData) {
+        should.exist(err);
+        done();
+      });
+    });
+    
+    it('should not create a new SensorSet (existing id)', function (done) {
+      let s = {
+        identifiant: "test-sensor-set"
+      };
+
+      SensorSet.create(s, function (err, createdData) {
+        should.not.exist(err);
+        
+        let s = {
+          identifiant: "test-sensor-set"
+        };
+
+        SensorSet.create(s, function (err, createdData) {
+          should.exist(err);
+          done();
+        });
+      });
     });
   });
 });

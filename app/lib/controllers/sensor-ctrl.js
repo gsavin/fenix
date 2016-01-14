@@ -19,14 +19,11 @@ class SensorCtrl {
   list (action) {
     return new Promise(
       function (resolve, reject) {
-        fenix.logger.debug("launch find on Sensor model", fenix.db.readyState);
-
         Sensor.find().exec(function(err, sensors) {
           if (err) {
             reject(err);
           }
           else {
-            fenix.logger.debug(sensors.length);
             action(sensors);
             resolve();
           }
