@@ -14,7 +14,7 @@ module.exports = {
   },
 
   db: {
-    DB_URI: 'mongodb://localhost/firediag-test',
-    DB_NAME: 'firediag-test'
+    uri:  'mongodb://localhost/firediag-test',
+    name: 'firediag-test'
   }
 };

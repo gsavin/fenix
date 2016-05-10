@@ -11,23 +11,24 @@
       <h1 class="sensor-identifiant"></h1>
       <h4 class="sensor-id"></h4>
     </template>
-    <template id="template-mqtt-connection-manager">
-      <input type="text" name="mqtt-server-uri" placeholder="Enter mqtt server uri...">
-      <button class="action-connect">Connect</button>
-      <button class="action-disconnect">Disconnect</button>
+    <template id="mqtt-connection-manager">
+      <div>
+        <input type="text" name="mqtt-server-uri" placeholder="mqtt server uri">
+        <button>Connect</button>
+      </div>
     </template>
   </head>
   <body data-ng-app="fenix">
     <div id="container">
       <nav id="main-nav">
         <ul>
-          <li><a class="submenu-opener" href="/test"><i class="fa fa-fw fa-tasks"></i><span class="label">Sensors</span></a></li>
-          <li><a href="#"><i class="fa fa-fw fa-cogs"></i><span class="label">Paramètres</span></a></li>
-        </ul>
-        <ul class="nav-right">
-          <li>
-            <fx-mqtt-connection-manager></fx-mqtt-connection-manager>
+          <li><a href="#" class="submenu-opener"><i class="fa fa-fw fa-tasks"></i><span class="label">Sensors</span></a>
+            <div class="submenu">
+              <fx-sensors-list></fx-sensors-list>
+            </div>
           </li>
+          <li><a href="#"><i class="fa fa-fw fa-plus-circle"></i><span class="label">Nouveau</span></a></li>
+          <li><a href="#"><i class="fa fa-fw fa-cogs"></i><span class="label">Paramètres</span></a></li>
         </ul>
       </nav>
       <div id="main-content" data-ng-view=""></div>

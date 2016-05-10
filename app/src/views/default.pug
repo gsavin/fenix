@@ -12,12 +12,15 @@ html(lang="en")
     link(rel="stylesheet", href="styles/components.css")
 
     template#template-sensor-panel
-      include ./templates/sensor-panel.jade
-    
+      include ./templates/sensor-panel.pug
+
+    template#template-mqtt-connection-manager
+      include ./templates/mqtt-connection-manager.pug
+
   body(data-ng-app="fenix")
     div#container
-      include ./includes/nav.jade
+      include ./includes/nav.pug
 
       div#main-content(data-ng-view="")
-    
+
     script(src="lib/init.js")

@@ -1,0 +1,15 @@
+nav#main-nav
+  ul
+    li
+      a.submenu-opener(href="/test")
+        i.fa.fa-fw.fa-tasks
+        span.label Sensors
+
+    li
+      a(href="#")
+        i.fa.fa-fw.fa-cogs
+        span.label Paramètres
+
+  ul.nav-right
+    li
+      fx-mqtt-connection-manager

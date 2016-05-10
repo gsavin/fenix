@@ -11,9 +11,18 @@ body {
   font-family: "Exo 2.0";
 }
 
+body ::shadow * {
+  font-family: "Exo 2.0";
+}
+
 #container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+}
+#container input, #container button {
+  padding: 5px;
+  background-color: #2a51a3;
+  color: white;
 }
 
 /*# sourceMappingURL=main.css.map */

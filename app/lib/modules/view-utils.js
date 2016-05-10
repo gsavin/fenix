@@ -5,12 +5,18 @@ const EventEmitter = require('events');
 
 function ViewUtils() {
   EventEmitter.call(this);
+
+  this.priority = 10;
+  this.name = "view-utils";
 }
 
 util.inherits(ViewUtils, EventEmitter);
 
 ViewUtils.prototype.init = function() {
-  this.emit('init');
+  return new Promise((resolve, reject) => {
+    this.emit('init');
+    resolve();
+  });
 };
 
 var viewUtils = new ViewUtils();

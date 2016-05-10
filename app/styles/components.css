@@ -1,38 +1,31 @@
 nav#main-nav {
-  /*position:fixed;
-  top:0px;
-  left:0px;*/
-  height: 100%;
+  background-color: #21252b;
 }
 nav#main-nav ul {
   list-style-type: none;
-  min-height: 100%;
-  height: 100%;
-  background-color: #21252b;
+  /*min-height: 100%;
+  height:100%;*/
   padding-left: 0px;
   margin: 0px;
 }
 nav#main-nav ul li {
   display: block;
+  float: left;
   color: #c9c9c9;
   font-family: 'Exo 2';
   font-weight: 300;
   font-size: 16px;
-  border-bottom: 1px solid #2c3139;
-  width: 100%;
   box-sizing: border-box;
   text-align: left;
-  line-height: 1;
 }
 nav#main-nav ul li a {
   color: inherit;
   font-family: inherit;
   font-weight: inherit;
   font-size: inherit;
-  box-sizing: border-box;
-  width: 100%;
+  /*width: 100%;*/
   display: block;
-  padding: 20px 20px 20px 10px;
+  padding: 20px;
   text-transform: uppercase;
   text-decoration: none;
 }
@@ -41,7 +34,7 @@ nav#main-nav ul li a i {
 }
 nav#main-nav ul li a:hover {
   text-decoration: none;
-  background-color: #23527c;
+  background-color: #2a51a3;
 }
 nav#main-nav ul li a .label {
   padding: 0px 10px;
@@ -53,6 +46,12 @@ nav#main-nav ul li .submenu {
 nav#main-nav ul li .submenu.opened {
   display: block;
 }
+nav#main-nav ul.nav-right li {
+  float: right;
+}
+nav#main-nav::after {
+  clear: both;
+}
 
 fx-sensors-list {
   display: flex;
@@ -62,22 +61,76 @@ fx-sensors-list {
 fx-sensors-list fx-sensor {
   padding: 8px;
   border-radius: 4px;
-  /*&:before {
-    content: "\f192";
-    padding-right: 5px;
-    display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
-    font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }*/
 }
 fx-sensors-list fx-sensor i {
   margin-right: 10px;
 }
 fx-sensors-list fx-sensor:hover {
   background-color: #21B384;
+}
+
+fx-mqtt-connection-manager {
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 10px;
+  display: block;
+  height: 100%;
+  background-color: #2a51a3;
+}
+fx-mqtt-connection-manager.connected {
+  background-color: #2aa330;
+}
+fx-mqtt-connection-manager.connected::shadow input {
+  border-bottom: 1px solid #258f2a;
+}
+fx-mqtt-connection-manager.connected::shadow button {
+  border: 1px solid #258f2a;
+}
+fx-mqtt-connection-manager.connected::shadow button.action-disconnect {
+  display: inline-block;
+}
+fx-mqtt-connection-manager.connected::shadow button.action-connect {
+  display: none;
+}
+fx-mqtt-connection-manager.connected::shadow button:hover {
+  background-color: #207a24;
+}
+fx-mqtt-connection-manager.error {
+  background-color: #b82523;
+}
+fx-mqtt-connection-manager.error::shadow input {
+  border-bottom: 1px solid #a3211f;
+}
+fx-mqtt-connection-manager.error::shadow button {
+  border: 1px solid #a3211f;
+}
+fx-mqtt-connection-manager.error::shadow button:hover {
+  background-color: #8d1c1b;
+}
+fx-mqtt-connection-manager::shadow input, fx-mqtt-connection-manager::shadow button {
+  color: white;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 300;
+}
+fx-mqtt-connection-manager::shadow input {
+  border: none;
+  border-bottom: 1px solid #25478f;
+  padding: 10px;
+}
+fx-mqtt-connection-manager::shadow button {
+  border: 1px solid #25478f;
+  padding: 10px;
+  margin-left: 10px;
+}
+fx-mqtt-connection-manager::shadow button.action-disconnect {
+  display: none;
+}
+fx-mqtt-connection-manager::shadow button.action-connect {
+  display: inline-block;
+}
+fx-mqtt-connection-manager::shadow button:hover {
+  background-color: #203d7a;
 }
 
 /*# sourceMappingURL=components.css.map */

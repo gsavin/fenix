@@ -16,7 +16,7 @@ module.exports = {
   },
 
   db: {
-    DB_OPTIONS: {
+    options: {
       db: {
         safe: true
       }
@@ -31,6 +31,10 @@ module.exports = {
 
     '/favicon.ico': 'app/favicon.ico',
     '/favicon.png': 'app/favicon.png'
+  },
+
+  mqtt: {
+    uri: 'mqtt://192.168.1.243'
   },
 
   IO_PATH: "/api/io/"

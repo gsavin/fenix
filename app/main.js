@@ -1,8 +1,9 @@
 'use strict';
 
-var app = require('app')
-  , BrowserWindow = require('browser-window')
-  , dialog = require('dialog');
+const app = require('app')
+    , BrowserWindow = require('browser-window')
+    , dialog = require('dialog')
+    , fenix = require('./lib/fenix.js');
 
 //
 // Keep a global reference of the window object, if you don't, the window will
@@ -24,7 +25,7 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  var menu = require('./lib/controllers/menu.js');
+  /*var menu = require('./lib/controllers/menu.js');
 
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -41,5 +42,6 @@ app.on('ready', function() {
     // when you should delete the corresponding element.
     //
     mainWindow = null;
-  });
+  });*/
+  fenix.init();
 });

@@ -18,7 +18,7 @@ module.exports = function(grunt) {
       }
     },
 
-    jade: {
+    pug: {
       compile: {
         options: {
           data: {
@@ -26,10 +26,19 @@ module.exports = function(grunt) {
           },
           pretty: true
         },
-        files: {
-          "app/default.html":             "app/src/views/default.jade",
-          "app/views/partials/main.html": "app/src/views/partials/main.jade"
-        }
+        files: [
+          {
+            dest: "app/default.html",
+            src:  "app/src/views/default.pug"
+          },
+          {
+            expand: true,
+            dest: "app/views/partials/",
+            ext: ".html",
+            src:  "*.pug",
+            cwd:  "app/src/views/partials"
+          }
+        ]
       }
     }
   });
@@ -37,11 +46,11 @@ module.exports = function(grunt) {
   //
   // Load the plugins.
   //
-  grunt.loadNpmTasks('grunt-contrib-jade');
+  grunt.loadNpmTasks('grunt-contrib-pug');
   grunt.loadNpmTasks('grunt-contrib-sass');
 
   //
   // Default task(s).
   //
-  grunt.registerTask('default', ['jade', 'sass']);
+  grunt.registerTask('default', ['pug', 'sass']);
 };

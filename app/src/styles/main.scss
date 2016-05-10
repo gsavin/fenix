@@ -14,7 +14,17 @@ body {
   font-family: $default-font;
 }
 
+body ::shadow * {
+  font-family: $default-font;
+}
+
 #container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+
+  input, button {
+    padding: 5px;
+    background-color: #2a51a3;
+    color: white;
+  }
 }

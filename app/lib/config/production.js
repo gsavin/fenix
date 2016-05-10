@@ -12,7 +12,7 @@ module.exports = {
   },
 
   db: {
-    DB_URI: 'mongodb://localhost/firediag-production',
-    DB_NAME: 'firediag-production'
+    uri:  'mongodb://localhost/firediag-production',
+    name: 'firediag-production'
   }
 };
