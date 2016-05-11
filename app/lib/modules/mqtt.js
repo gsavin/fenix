@@ -5,7 +5,8 @@ const mqtt          = require('mqtt')
     , config        = require('../config')
     , ipc           = require('ipc')
     , logger        = require('../logger.js')
-    , fenix         = require('../fenix');
+    , fenix         = require('../fenix')
+    , merge         = require('lodash').merge;
 
 class MQTTSensor {
   constructor(name) {
@@ -21,23 +22,42 @@ class MQTTSensor {
 class MQTTModule extends EventEmitter {
   constructor() {
     super();
+
     this.sensors = {};
+
+    this.state = {
+      status: 'disconnected',
+      uri: '',
+      error: null
+    };
   }
 
   init() {
     return new Promise((resolve, reject) => {
-      ipc.on('/mqtt/connect', (event, arg) => {
+      ipc.on('/mqtt/action/connect', (event, arg) => {
         this.connect(arg);
+      });
+
+      ipc.on('/mqtt/action/disconnect', (event, arg) => {
+        this.disconnect();
       });
 
       resolve();
     });
   }
 
+  setState(state) {
+    this.state = merge(this.state, state);
+    fenix.send('/mqtt/state', this.state);
+  }
+
   connect(uri) {
     logger.info('connecting to', uri);
 
-    fenix.send('/mqtt/status', 'connecting');
+    this.setState({
+      status: 'connecting',
+      uri: uri
+    });
 
     return new Promise((resolve, reject) => {
       const todo = () => {
@@ -45,26 +65,40 @@ class MQTTModule extends EventEmitter {
 
         this._client.on('connect', () => {
           this._client.subscribe('/sensors/+');
-          fenix.send('/mqtt/status', 'connected');
+
+          this.setState({
+            status: 'connected',
+            uri: uri
+          });
 
           resolve();
         });
 
-        this._client.on('error', () => {
-          fenix.send('/mqtt/status', 'error');
+        this._client.on('error', error => {
+          this.setState({
+            status: 'error',
+            error: error
+          });
+
           reject();
         });
 
         this._client.on('reconnect', () => {
-          fenix.send('/mqtt/status', 'connecting');
+          this.setState({
+            status: 'connecting'
+          });
         });
 
         this._client.on('close', () => {
-          fenix.send('/mqtt/status', 'disconnected');
+          this.setState({
+            status: 'disconnected'
+          });
         });
 
         this._client.on('offline', () => {
-          fenix.send('/mqtt/status', 'disconnected');
+          this.setState({
+            status: 'disconnected'
+          });
         });
 
         this._client.on('message', (topic, message, packet) => {
@@ -84,15 +118,17 @@ class MQTTModule extends EventEmitter {
                 sensor = new MQTTSensor(sensorName);
                 this.sensors[sensorName] = sensor;
 
-                fenix.send('/mqtt/sensors-add', m[1]);
+                fenix.send('/mqtt/sensors', this.sensors);
               }
 
-
+              sensor.updateLastPresence();
             }
             else {
               //
               // Data
               //
+
+              logger.debug('data');
             }
           }
         });
@@ -106,6 +142,18 @@ class MQTTModule extends EventEmitter {
         todo();
       }
     });
+  }
+
+  disconnect() {
+    if (this._client != undefined) {
+      this._client.end(() => {
+        this._client.removeAllListeners();
+
+        this.setState({
+          status: 'disconnected'
+        });
+      });
+    }
   }
 
   get name() {

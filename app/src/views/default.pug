@@ -17,10 +17,14 @@ html(lang="en")
     template#template-mqtt-connection-manager
       include ./templates/mqtt-connection-manager.pug
 
-  body(data-ng-app="fenix")
+    template#template-mqtt-sensors-list
+      include ./templates/mqtt-sensors-list.pug
+
+  body
     div#container
       include ./includes/nav.pug
 
-      div#main-content(data-ng-view="")
+      div#main-content
+        div#mqtt-sensors-list
 
-    script(src="lib/init.js")
+    script(src="lib/ui/bundle.js")

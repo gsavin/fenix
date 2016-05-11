@@ -13,25 +13,31 @@
     </template>
     <template id="template-mqtt-connection-manager">
       <input type="text" name="mqtt-server-uri" placeholder="Enter mqtt server uri...">
-      <button class="action-connect">Connect</button>
-      <button class="action-disconnect">Disconnect</button>
+      <button class="action action-connect"><i class="fa fa-plug fa-fw"></i></button>
+      <button class="action action-disconnect"><i class="fa fa-ban fa-fw"></i></button>
+      <button class="action action-connecting"><i class="fa fa-cog fa-spin fa-fw"></i></button>
+    </template>
+    <template id="template-mqtt-sensors-list">
+      <ul></ul>
     </template>
   </head>
-  <body data-ng-app="fenix">
+  <body>
     <div id="container">
       <nav id="main-nav">
-        <ul>
+        <ul class="nav-content">
           <li><a class="submenu-opener" href="/test"><i class="fa fa-fw fa-tasks"></i><span class="label">Sensors</span></a></li>
           <li><a href="#"><i class="fa fa-fw fa-cogs"></i><span class="label">Paramètres</span></a></li>
         </ul>
         <ul class="nav-right">
           <li>
-            <fx-mqtt-connection-manager></fx-mqtt-connection-manager>
+            <div id="mqtt-connection-manager"></div>
           </li>
         </ul>
       </nav>
-      <div id="main-content" data-ng-view=""></div>
+      <div id="main-content">
+        <div id="mqtt-sensors-list"></div>
+      </div>
     </div>
-    <script src="lib/init.js"></script>
+    <script src="lib/ui/bundle.js"></script>
   </body>
 </html>

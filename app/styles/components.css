@@ -1,14 +1,14 @@
 nav#main-nav {
   background-color: #21252b;
 }
-nav#main-nav ul {
+nav#main-nav ul.nav-content {
   list-style-type: none;
   /*min-height: 100%;
   height:100%;*/
   padding-left: 0px;
   margin: 0px;
 }
-nav#main-nav ul li {
+nav#main-nav ul.nav-content li {
   display: block;
   float: left;
   color: #c9c9c9;
@@ -18,7 +18,7 @@ nav#main-nav ul li {
   box-sizing: border-box;
   text-align: left;
 }
-nav#main-nav ul li a {
+nav#main-nav ul.nav-content li a {
   color: inherit;
   font-family: inherit;
   font-weight: inherit;
@@ -29,22 +29,19 @@ nav#main-nav ul li a {
   text-transform: uppercase;
   text-decoration: none;
 }
-nav#main-nav ul li a i {
+nav#main-nav ul.nav-content li a i {
   font-size: 125%;
 }
-nav#main-nav ul li a:hover {
+nav#main-nav ul.nav-content li a:hover {
   text-decoration: none;
   background-color: #2a51a3;
 }
-nav#main-nav ul li a .label {
+nav#main-nav ul.nav-content li a .label {
   padding: 0px 10px;
 }
-nav#main-nav ul li .submenu {
-  background-color: #282c34;
-  display: none;
-}
-nav#main-nav ul li .submenu.opened {
-  display: block;
+nav#main-nav ul.nav-right {
+  list-style-type: none;
+  margin: 0px;
 }
 nav#main-nav ul.nav-right li {
   float: right;
@@ -69,7 +66,7 @@ fx-sensors-list fx-sensor:hover {
   background-color: #21B384;
 }
 
-fx-mqtt-connection-manager {
+#mqtt-connection-manager .mqtt-connection-manager {
   margin-top: auto;
   margin-bottom: auto;
   padding: 10px;
@@ -77,59 +74,48 @@ fx-mqtt-connection-manager {
   height: 100%;
   background-color: #2a51a3;
 }
-fx-mqtt-connection-manager.connected {
+#mqtt-connection-manager .mqtt-connection-manager.connected {
   background-color: #2aa330;
 }
-fx-mqtt-connection-manager.connected::shadow input {
-  border-bottom: 1px solid #258f2a;
-}
-fx-mqtt-connection-manager.connected::shadow button {
+#mqtt-connection-manager .mqtt-connection-manager.connected input {
   border: 1px solid #258f2a;
 }
-fx-mqtt-connection-manager.connected::shadow button.action-disconnect {
-  display: inline-block;
+#mqtt-connection-manager .mqtt-connection-manager.connected button {
+  border: 1px solid #258f2a;
 }
-fx-mqtt-connection-manager.connected::shadow button.action-connect {
-  display: none;
-}
-fx-mqtt-connection-manager.connected::shadow button:hover {
+#mqtt-connection-manager .mqtt-connection-manager.connected button:hover {
   background-color: #207a24;
 }
-fx-mqtt-connection-manager.error {
+#mqtt-connection-manager .mqtt-connection-manager.error {
   background-color: #b82523;
 }
-fx-mqtt-connection-manager.error::shadow input {
+#mqtt-connection-manager .mqtt-connection-manager.error input {
   border-bottom: 1px solid #a3211f;
 }
-fx-mqtt-connection-manager.error::shadow button {
+#mqtt-connection-manager .mqtt-connection-manager.error button {
   border: 1px solid #a3211f;
 }
-fx-mqtt-connection-manager.error::shadow button:hover {
+#mqtt-connection-manager .mqtt-connection-manager.error button:hover {
   background-color: #8d1c1b;
 }
-fx-mqtt-connection-manager::shadow input, fx-mqtt-connection-manager::shadow button {
+#mqtt-connection-manager .mqtt-connection-manager input, #mqtt-connection-manager .mqtt-connection-manager button {
   color: white;
   background-color: transparent;
   font-size: 16px;
   font-weight: 300;
 }
-fx-mqtt-connection-manager::shadow input {
+#mqtt-connection-manager .mqtt-connection-manager input {
   border: none;
-  border-bottom: 1px solid #25478f;
+  border: 1px solid #25478f;
   padding: 10px;
+  font-family: monospace;
 }
-fx-mqtt-connection-manager::shadow button {
+#mqtt-connection-manager .mqtt-connection-manager button {
   border: 1px solid #25478f;
   padding: 10px;
   margin-left: 10px;
 }
-fx-mqtt-connection-manager::shadow button.action-disconnect {
-  display: none;
-}
-fx-mqtt-connection-manager::shadow button.action-connect {
-  display: inline-block;
-}
-fx-mqtt-connection-manager::shadow button:hover {
+#mqtt-connection-manager .mqtt-connection-manager button:hover {
   background-color: #203d7a;
 }
 

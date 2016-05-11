@@ -4,7 +4,7 @@ function _register(tagName, proto) {
   return document.registerElement(tagName, {prototype: proto});
 }
 
-var fenix = require('../fenix.js');
+var fenix = require('../fenix-ui.js');
 
 var SensorPrototype      = Object.create(HTMLElement.prototype)
   , SensorsListPrototype = Object.create(HTMLElement.prototype);

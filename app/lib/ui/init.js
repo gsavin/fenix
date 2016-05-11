@@ -1,8 +1,8 @@
 'use strict';
 
 (function() {
-  var fenix = require('./lib/fenix-ui.js');
-
+  var fenix = require('./fenix-ui.js');
+  
   /*
    * Initializing the base tag...
    */

@@ -1,4 +1,4 @@
-fx-mqtt-connection-manager {
+#mqtt-connection-manager .mqtt-connection-manager {
   margin-top: auto;
   margin-bottom: auto;
   padding: 10px;
@@ -11,77 +11,59 @@ fx-mqtt-connection-manager {
   &.connected {
     background-color: $success-color;
 
-    &::shadow {
-      input {
-        border-bottom: 1px solid darken($success-color, 5%);
-      }
+    input {
+      border: 1px solid darken($success-color, 5%);
+    }
 
-      button {
-        border: 1px solid darken($success-color, 5%);
+    button {
+      border: 1px solid darken($success-color, 5%);
 
-        &.action-disconnect {
-          display:inline-block;
-        }
-
-        &.action-connect {
-          display:none;
-        }
-
-        &:hover {
-          background-color: darken($success-color, 10%);
-        }
+      &:hover {
+        background-color: darken($success-color, 10%);
       }
     }
+  }
+
+  &.connecting {
   }
 
   &.error {
     background-color: $danger-color;
 
-    &::shadow {
-      input {
-        border-bottom: 1px solid darken($danger-color, 5%);
-      }
+    input {
+      border-bottom: 1px solid darken($danger-color, 5%);
+    }
 
-      button {
-        border: 1px solid darken($danger-color, 5%);
+    button {
+      border: 1px solid darken($danger-color, 5%);
 
-        &:hover {
-          background-color: darken($danger-color, 10%);
-        }
+      &:hover {
+        background-color: darken($danger-color, 10%);
       }
     }
   }
 
-  &::shadow {
-    input, button {
-      color: white;
-      background-color: transparent;
-      font-size: 16px;
-      font-weight: 300;
-    }
+  input, button {
+    color: white;
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 300;
+  }
 
-    input {
-      border: none;
-      border-bottom: 1px solid darken($highlight-color, 5%);
-      padding: 10px;
-    }
+  input {
+    border: none;
+    border: 1px solid darken($highlight-color, 5%);
+    padding: 10px;
+    font-family: monospace;
+  }
 
-    button {
-      border: 1px solid darken($highlight-color, 5%);
-      padding: 10px;
-      margin-left: 10px;
+  button {
+    border: 1px solid darken($highlight-color, 5%);
+    padding: 10px;
+    margin-left: 10px;
 
-      &.action-disconnect {
-        display:none;
-      }
-
-      &.action-connect {
-        display:inline-block;
-      }
-
-      &:hover {
-        background-color: darken($highlight-color, 10%);
-      }
+    &:hover {
+      background-color: darken($highlight-color, 10%);
     }
   }
 }
