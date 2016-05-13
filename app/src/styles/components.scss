@@ -1,3 +1,8 @@
+@import 'components/home.scss';
 @import 'components/nav.scss';
-@import 'components/sensors-list.scss';
+
+@import 'components/mqtt.scss';
 @import 'components/mqtt-connection-manager.scss';
+@import 'components/mqtt-sensor.scss';
+@import 'components/mqtt-sensor-panel.scss';
+@import 'components/mqtt-sensors-list.scss';

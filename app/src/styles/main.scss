@@ -1,6 +1,6 @@
 @import 'theme';
 
-html, body, #container {
+html, body, #container, #app {
   min-height: 100%;
   height:100%;
   box-sizing: border-box;
@@ -18,13 +18,48 @@ body ::shadow {
   font-family: $default-font;
 }
 
-#container {
+#app {
   display: flex;
   flex-direction: column;
+
+  main, #main {
+    display: flex;
+    flex: 1 1 auto;
+  }
 }
 
 input, button {
   padding: 5px;
   background-color: #2a51a3;
   color: white;
+}
+
+
+a {
+  text-decoration: none;
+  color: $body-fg;
+
+  &:hover {
+    background-color: $highlight-color;
+  }
+}
+
+.nav a.active, nav a.active {
+  background-color: $body-bg;
+}
+
+button {
+  background-color: $nav-bg;
+  border: none;
+  padding: 5px;
+  display: inline-block;
+
+  &:hover {
+    background-color: $highlight-color;
+  }
+}
+
+.help {
+  padding: 10px;
+  color: darken($body-fg, 15%);
 }

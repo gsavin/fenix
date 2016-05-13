@@ -1,42 +1,46 @@
+.home {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+}
+.home h1 {
+  flex: 1 1 auto;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 40px;
+  text-align: center;
+  margin-top: -20px;
+}
+
 nav#main-nav {
   background-color: #21252b;
+  display: flex;
+  flex-direction: row;
 }
-nav#main-nav ul.nav-content {
-  list-style-type: none;
-  /*min-height: 100%;
-  height:100%;*/
-  padding-left: 0px;
-  margin: 0px;
-}
-nav#main-nav ul.nav-content li {
-  display: block;
-  float: left;
+nav#main-nav a {
   color: #c9c9c9;
   font-family: 'Exo 2';
   font-weight: 300;
   font-size: 16px;
   box-sizing: border-box;
   text-align: left;
-}
-nav#main-nav ul.nav-content li a {
   color: inherit;
   font-family: inherit;
   font-weight: inherit;
   font-size: inherit;
   /*width: 100%;*/
-  display: block;
   padding: 20px;
   text-transform: uppercase;
   text-decoration: none;
 }
-nav#main-nav ul.nav-content li a i {
+nav#main-nav a i {
   font-size: 125%;
 }
-nav#main-nav ul.nav-content li a:hover {
+nav#main-nav a:hover {
   text-decoration: none;
   background-color: #2a51a3;
 }
-nav#main-nav ul.nav-content li a .label {
+nav#main-nav a .label {
   padding: 0px 10px;
 }
 nav#main-nav ul.nav-right {
@@ -50,73 +54,93 @@ nav#main-nav::after {
   clear: both;
 }
 
-fx-sensors-list {
+#mqtt {
   display: flex;
   flex-direction: column;
-  font-weight: 300;
+  flex: 1 1 auto;
 }
-fx-sensors-list fx-sensor {
-  padding: 8px;
-  border-radius: 4px;
-}
-fx-sensors-list fx-sensor i {
-  margin-right: 10px;
-}
-fx-sensors-list fx-sensor:hover {
-  background-color: #21B384;
+#mqtt .mqtt-content {
+  display: flex;
+  flex-direction: line;
+  flex: 1 1 auto;
 }
 
-#mqtt-connection-manager .mqtt-connection-manager {
+.mqtt-connection-manager {
   margin-top: auto;
   margin-bottom: auto;
   padding: 10px;
   display: block;
   height: 100%;
   background-color: #2a51a3;
+  text-align: right;
 }
-#mqtt-connection-manager .mqtt-connection-manager.connected {
+.mqtt-connection-manager.connected {
   background-color: #2aa330;
 }
-#mqtt-connection-manager .mqtt-connection-manager.connected input {
+.mqtt-connection-manager.connected input, .mqtt-connection-manager.connected select {
   border: 1px solid #258f2a;
 }
-#mqtt-connection-manager .mqtt-connection-manager.connected button {
+.mqtt-connection-manager.connected button {
   border: 1px solid #258f2a;
 }
-#mqtt-connection-manager .mqtt-connection-manager.connected button:hover {
+.mqtt-connection-manager.connected button:hover {
   background-color: #207a24;
 }
-#mqtt-connection-manager .mqtt-connection-manager.error {
+.mqtt-connection-manager.error {
   background-color: #b82523;
 }
-#mqtt-connection-manager .mqtt-connection-manager.error input {
+.mqtt-connection-manager.error input, .mqtt-connection-manager.error select {
   border-bottom: 1px solid #a3211f;
 }
-#mqtt-connection-manager .mqtt-connection-manager.error button {
+.mqtt-connection-manager.error button {
   border: 1px solid #a3211f;
 }
-#mqtt-connection-manager .mqtt-connection-manager.error button:hover {
+.mqtt-connection-manager.error button:hover {
   background-color: #8d1c1b;
 }
-#mqtt-connection-manager .mqtt-connection-manager input, #mqtt-connection-manager .mqtt-connection-manager button {
+.mqtt-connection-manager input, .mqtt-connection-manager button, .mqtt-connection-manager select {
   color: white;
   background-color: transparent;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
-}
-#mqtt-connection-manager .mqtt-connection-manager input {
-  border: none;
+  padding: 6px;
   border: 1px solid #25478f;
-  padding: 10px;
+}
+.mqtt-connection-manager input, .mqtt-connection-manager select {
   font-family: monospace;
 }
-#mqtt-connection-manager .mqtt-connection-manager button {
-  border: 1px solid #25478f;
-  padding: 10px;
+.mqtt-connection-manager select {
+  text-align: right;
+}
+.mqtt-connection-manager select option {
+  background-color: #282c34;
+}
+.mqtt-connection-manager button {
   margin-left: 10px;
 }
-#mqtt-connection-manager .mqtt-connection-manager button:hover {
+.mqtt-connection-manager button:hover {
   background-color: #203d7a;
+}
+
+.mqtt-sensor a {
+  padding: 10px;
+  box-sizing: border-box;
+  display: block;
+  min-width: 150px;
+}
+
+.mqtt-sensor-panel {
+  flex: 1 1 auto;
+  padding: 15px;
+}
+.mqtt-sensor-panel h2 {
+  margin-top: 0px;
+}
+
+.mqtt-sensors-list {
+  display: flex;
+  flex-direction: column;
+  background-color: #21252b;
 }
 
 /*# sourceMappingURL=components.css.map */

@@ -4,7 +4,7 @@ const logger    = require('../logger.js')
     , fenixAPI  = require('./api.js');
 
 const React = require('react');
-const reactDOM = require('react-dom');
+const ReactDOM = require('react-dom');
 
 const COMPONENTS = [
 //  'sensors-list',
@@ -23,12 +23,17 @@ class FenixUI {
   }
 
   init() {
-    return new Promise((resolve, reject) => {
-      this.loadComponents()
-        .catch(err => { logger.error(err); reject(); })
-        //.then(() => { return this.loadAngular(); }, reject)
-        .then(resolve, reject)
-          .catch(err => { logger.error(err); reject(); });
+    logger.info('loading components');
+
+    const router          = require('./router.js')
+        , RouterProvider  = require('react-router5').RouterProvider
+        , App             = require('./components/app.jsx');
+
+    router.start(() => {
+      ReactDOM.render(
+        <RouterProvider router={ router }><App/></RouterProvider>,
+        document.getElementById('container')
+      );
     });
   }
 
@@ -36,20 +41,11 @@ class FenixUI {
     return new Promise(function(resolve, reject) {
       logger.info('loading components');
 
-      /*COMPONENTS.forEach(name => {
-        try {
-          require(`./components/${name}.js`);
-          logger.debug(`components "./components/${name}.js" loaded`);
-        }
-        catch(err) {
-          logger.error(`failed to load "./components/${name}.js"`, err);
-        }
-      });*/
-
       const MQTTConnectionManager = require('./components/mqtt-connection-manager.jsx')
           , MQTTSensorsList       = require('./components/mqtt-sensors-list.jsx');
 
-      reactDOM.render(
+
+      /*reactDOM.render(
         <MQTTConnectionManager/>,
         document.getElementById('mqtt-connection-manager')
       );
@@ -57,7 +53,7 @@ class FenixUI {
       reactDOM.render(
         <MQTTSensorsList/>,
         document.getElementById('mqtt-sensors-list')
-      );
+      );*/
 
       resolve();
     });

@@ -1,31 +1,33 @@
 'use strict';
 
-const React = require('react')
-    , fenix = require('../fenix-ui.js');
+const React       = require('react')
+    , MQTTSensor  = require('./mqtt-sensor.jsx');
 
 class MQTTSensorsList extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      sensors: {}
+      sensors: props.sensors || []
     };
 
-    fenix.api.on('/mqtt/sensors', sensors => {
+    /*fenix.api.on('/mqtt/sensors', sensors => {
       this.setState({
         sensors: sensors
       });
-    });
+    });*/
   }
 
   render() {
     let sensors = [];
 
-    Object.keys(this.state.sensors).forEach(k => {
-      sensors.push(<li>{ k }</li>);
+    this.state.sensors.forEach(k => {
+      sensors.push(<MQTTSensor key={ k } name={ k }/>);
     });
 
-    return <ul>{ sensors }</ul>
+    return (
+      <div className="mqtt-sensors-list nav">{ sensors }</div>
+    );
   }
 }
 

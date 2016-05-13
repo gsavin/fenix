@@ -1,8 +1,15 @@
 'use strict';
 
+const menu = require('./menu.js');
+
 (function() {
   var fenix = require('./fenix-ui.js');
-  
+
+  window.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    menu.popup(remote.getCurrentWindow());
+  }, false);
+
   /*
    * Initializing the base tag...
    */
@@ -12,18 +19,5 @@
   document.head.appendChild(base);
 
   fenix.logger.debug("init fenix");
-  fenix.init()
-  .then(
-
-    function() {
-      fenix.logger.debug("init ok");
-    },
-
-    function(err) {
-      fenix.logger.debug("init failed", err);
-    }
-  )
-  .catch(function (err) {
-    fenix.logger.error(err);
-  });
+  fenix.init();
 })();

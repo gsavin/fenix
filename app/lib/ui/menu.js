@@ -1,6 +1,6 @@
 'use strict';
 
-var Menu   = require('menu');
+const Menu = require('electron').remote.Menu;
 
 var template = [
   {

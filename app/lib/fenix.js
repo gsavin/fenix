@@ -1,86 +1,17 @@
 'use strict';
 
-var config   = require('./config')
-  , fs       = require('fs')
-  , path     = require('path')
-  , mongoose = require('mongoose')
-  , BrowserWindow = require('browser-window')
-  , logger   = require('./logger.js');
+var fs            = require('fs')
+  , path          = require('path')
+  , mongoose      = require('mongoose')
+  , BrowserWindow = require('electron').BrowserWindow
+  , config        = require('./config')
+  , logger        = require('./logger.js');
 
 const MODULES = [
 //  'sensors',
   'mqtt',
 //  'view-utils'
 ];
-
-/*function initFenixApp(fenix) {
-  return function(resolve, reject) {
-    fenix.logger.debug("start initialize fenix");
-
-    if (fenix.loaded) {
-      //
-      // Already loaded...
-      //
-      fenix.logger.debug("already loaded");
-      resolve();
-    }
-
-    fenix.loaded = true;
-
-    //
-    // Loading modules...
-    //
-
-    loadModules(fenix)
-      .then(resolve, reject);
-  };
-}
-
-function loadModules(fenix) {
-  return new Promise((resolve, reject) => {
-    fenix.logger.info('loading modules');
-
-    var mods = [];
-
-    MODULES.forEach(name => {
-      try {
-        let mod = require(`./modules/${name}.js`);
-        fenix.modules[name] = mod;
-
-        if (name != mod.name) {
-          fenix.logger.debug(`Module ${mod.name} should be in file 'modules/${mod.name}.js'`);
-        }
-
-        mods.push(mod);
-        //mod.init();
-
-        fenix.logger.debug(`module "./modules/${name}.js" loaded`);
-      }
-      catch(err) {
-        fenix.logger.error(`failed to load "./modules/${name}.js"`, err);
-      }
-    });
-
-    mods.sort(function (m1, m2) {
-      return m2.priority - m1.priority;
-    });
-
-    var f = () => {
-      if (mods.length == 0) {
-        resolve();
-      }
-      else {
-        var m = mods.pop();
-
-        fenix.logger.info("init " + m.name);
-
-        m.init().then(f, reject).catch(reject);
-      }
-    };
-
-    f();
-  })
-}*/
 
 class FenixApp {
   constructor() {
@@ -174,15 +105,15 @@ class FenixApp {
   }
 
   loadWindow() {
-    const menu = require('./controllers/menu.js');
+    //const menu = require('./controllers/menu.js');
 
     this.mainWindow = new BrowserWindow({
       width: 1280,
       height: 720
     });
 
-    this.mainWindow.loadUrl('file://' + __dirname + '/../default.html');
-    this.mainWindow.setMenu(menu);
+    this.mainWindow.loadURL('file://' + __dirname + '/../default.html');
+    //this.mainWindow.setMenu(menu);
 
     this.mainWindow.on('closed', () => {
       //
@@ -199,13 +130,6 @@ class FenixApp {
       this.mainWindow.webContents.send(channel, arg);
     }
   }
-
-/*  setTemplate (element, templateName) {
-    var template = document.querySelector('#template-' + templateName)
-      , clone    = document.importNode(template.content, true);
-
-    element.appendChild(clone);
-  }*/
 }
 
 module.exports = new FenixApp();

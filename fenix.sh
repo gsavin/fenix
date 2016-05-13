@@ -20,5 +20,5 @@ function abspath {
 HERE=`abspath $0`
 
 pushd $HERE > /dev/null
-./node_modules/.bin/electron .
+npm start
 popd > /dev/null

@@ -1,9 +1,8 @@
 'use strict';
 
-const app = require('app')
-    , BrowserWindow = require('browser-window')
-    , dialog = require('dialog')
-    , fenix = require('./lib/fenix.js');
+const app           = require('electron').app
+    , BrowserWindow = require('electron').BrowserWindow
+    , fenix         = require('./lib/fenix.js');
 
 //
 // Keep a global reference of the window object, if you don't, the window will

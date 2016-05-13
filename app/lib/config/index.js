@@ -7,7 +7,8 @@
 var _ = require('lodash');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-console.log('env is set to', process.env.NODE_ENV);
+console.log("Fenix running on electron v" + process.versions.electron);
+console.log('ENV is set to', process.env.NODE_ENV);
 
 /**
  * Load environment configuration

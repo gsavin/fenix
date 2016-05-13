@@ -1,0 +1,13 @@
+@import '../theme';
+
+#mqtt {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+
+  .mqtt-content {
+    display: flex;
+    flex-direction: line;
+    flex: 1 1 auto;
+  }
+}

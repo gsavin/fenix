@@ -4,40 +4,12 @@
     <meta charset="utf-8">
     <title>Fenix</title>
     <link rel="stylesheet" href="styles/font-awesome.min.css">
-    <link rel="stylesheet" href="styles/fonts/exo2/stylesheet.css">
+    <link rel="stylesheet" href="styles/fonts/open-sans.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
-    <template id="template-sensor-panel">
-      <h1 class="sensor-identifiant"></h1>
-      <h4 class="sensor-id"></h4>
-    </template>
-    <template id="template-mqtt-connection-manager">
-      <input type="text" name="mqtt-server-uri" placeholder="Enter mqtt server uri...">
-      <button class="action action-connect"><i class="fa fa-plug fa-fw"></i></button>
-      <button class="action action-disconnect"><i class="fa fa-ban fa-fw"></i></button>
-      <button class="action action-connecting"><i class="fa fa-cog fa-spin fa-fw"></i></button>
-    </template>
-    <template id="template-mqtt-sensors-list">
-      <ul></ul>
-    </template>
   </head>
   <body>
-    <div id="container">
-      <nav id="main-nav">
-        <ul class="nav-content">
-          <li><a class="submenu-opener" href="/test"><i class="fa fa-fw fa-tasks"></i><span class="label">Sensors</span></a></li>
-          <li><a href="#"><i class="fa fa-fw fa-cogs"></i><span class="label">Paramètres</span></a></li>
-        </ul>
-        <ul class="nav-right">
-          <li>
-            <div id="mqtt-connection-manager"></div>
-          </li>
-        </ul>
-      </nav>
-      <div id="main-content">
-        <div id="mqtt-sensors-list"></div>
-      </div>
-    </div>
+    <div id="container"></div>
     <script src="lib/ui/bundle.js"></script>
   </body>
 </html>

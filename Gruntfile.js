@@ -11,11 +11,11 @@ module.exports = function(grunt) {
         options: {
           style: 'expanded'
         },
-        files: {
+        files: [{
           'app/styles/main.css': ['app/src/styles/main.scss'],
           'app/styles/font-awesome.min.css': ['app/src/styles/font-awesome/font-awesome.scss'],
           'app/styles/components.css': ['app/src/styles/components.scss']
-        }
+        }]
       }
     },
 

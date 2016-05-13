@@ -1,0 +1,7 @@
+@import '../theme';
+
+.mqtt-sensors-list {
+  display: flex;
+  flex-direction: column;
+  background-color: $nav-bg;
+}

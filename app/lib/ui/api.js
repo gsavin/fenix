@@ -1,6 +1,6 @@
 'use strict';
 
-const ipc = require('ipc');
+const ipc = require('electron').ipcRenderer;
 
 class FenixAPI {
   constructor() {
@@ -11,8 +11,8 @@ class FenixAPI {
     ipc.on(channel, cb);
   }
 
-  send(channel, args) {
-    ipc.send(channel, args);
+  send(channel, ...args) {
+    ipc.send(channel, ...args);
   }
 }
 

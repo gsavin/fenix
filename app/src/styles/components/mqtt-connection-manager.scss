@@ -1,4 +1,6 @@
-#mqtt-connection-manager .mqtt-connection-manager {
+@import '../theme';
+
+.mqtt-connection-manager {
   margin-top: auto;
   margin-bottom: auto;
   padding: 10px;
@@ -8,10 +10,12 @@
 
   background-color: $highlight-color;
 
+  text-align: right;
+
   &.connected {
     background-color: $success-color;
 
-    input {
+    input, select {
       border: 1px solid darken($success-color, 5%);
     }
 
@@ -30,7 +34,7 @@
   &.error {
     background-color: $danger-color;
 
-    input {
+    input, select {
       border-bottom: 1px solid darken($danger-color, 5%);
     }
 
@@ -43,23 +47,28 @@
     }
   }
 
-  input, button {
+  input, button, select {
     color: white;
     background-color: transparent;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300;
+    padding: 6px;
+    border: 1px solid darken($highlight-color, 5%);
   }
 
-  input {
-    border: none;
-    border: 1px solid darken($highlight-color, 5%);
-    padding: 10px;
+  input, select {
     font-family: monospace;
   }
 
+  select {
+    text-align: right;
+    
+    option {
+      background-color: $body-bg;
+    }
+  }
+
   button {
-    border: 1px solid darken($highlight-color, 5%);
-    padding: 10px;
     margin-left: 10px;
 
     &:hover {

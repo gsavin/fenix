@@ -1,4 +1,4 @@
-html, body, #container {
+html, body, #container, #app {
   min-height: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -8,22 +8,53 @@ html, body, #container {
 body {
   background-color: #282c34;
   color: #efefef;
-  font-family: "Exo 2.0";
+  font-family: "Open Sans";
 }
 
 body ::shadow {
-  font-family: "Exo 2.0";
+  font-family: "Open Sans";
 }
 
-#container {
+#app {
   display: flex;
   flex-direction: column;
+}
+#app main, #app #main {
+  display: flex;
+  flex: 1 1 auto;
 }
 
 input, button {
   padding: 5px;
   background-color: #2a51a3;
   color: white;
+}
+
+a {
+  text-decoration: none;
+  color: #efefef;
+}
+a:hover {
+  background-color: #2a51a3;
+}
+
+.nav a.active, nav a.active {
+  background-color: #282c34;
+}
+
+button {
+  background-color: #21252b;
+  border: none;
+  padding: 5px;
+  display: inline-block;
+}
+button:hover {
+  background-color: #2a51a3;
+}
+
+.help {
+  padding: 10px;
+  color: #c9c9c9;
 }
 
 /*# sourceMappingURL=main.css.map */

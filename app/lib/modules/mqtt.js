@@ -2,15 +2,24 @@
 
 const mqtt          = require('mqtt')
     , EventEmitter  = require('events')
+    , merge         = require('lodash').merge
+    , ipc           = require('electron').ipcMain
     , config        = require('../config')
-    , ipc           = require('ipc')
     , logger        = require('../logger.js')
-    , fenix         = require('../fenix')
-    , merge         = require('lodash').merge;
+    , fenix         = require('../fenix');
 
+/**
+ * An MQTT sensor.
+ *
+ * It is described by a name, and a list of sensor-data-types (such temperature,
+ * humidity...).
+ *
+ */
 class MQTTSensor {
   constructor(name) {
-    this.name = name;
+    this.name         = name;
+    this.types        = [];
+    this.subscribed   = false;
     this.lastPresence = Date.now();
   }
 
@@ -19,6 +28,26 @@ class MQTTSensor {
   }
 }
 
+/**
+ * The MQTT module.
+ *
+ * It handles MQTT topic user will subscribed to. It can be controlled sending
+ * appropriate action through the ipc service. All actions are '/mqtt' prefixed.
+ *
+ * List of actions :
+ *
+ * /mqtt/action/connect     Connect to a MQTT server. It takes one argument which is
+ *                          the serveur uri.
+ *
+ * /mqtt/action/disconnect  Disconnect from the actual MQTT server.
+ *
+ * /mqtt/action/refresh     Send the state and the sensors list back through the ipc
+ *                          service.
+ *
+ * State of the module is sent through ipc using '/mqtt/state' action name. Sensors
+ * list is sent using '/mqtt/sensors'.
+ *
+ */
 class MQTTModule extends EventEmitter {
   constructor() {
     super();
@@ -27,19 +56,63 @@ class MQTTModule extends EventEmitter {
 
     this.state = {
       status: 'disconnected',
-      uri: '',
+      uri: {
+        host: '',
+        scheme: ''
+      },
       error: null
     };
   }
 
   init() {
     return new Promise((resolve, reject) => {
-      ipc.on('/mqtt/action/connect', (event, arg) => {
-        this.connect(arg);
+      ipc.on('/mqtt/action/connect', (event, scheme, host) => {
+        this.connect(scheme, host);
       });
 
       ipc.on('/mqtt/action/disconnect', (event, arg) => {
         this.disconnect();
+      });
+
+      ipc.on('/mqtt/action/refresh', (event, arg) => {
+        fenix.send('/mqtt/state', this.state);
+        fenix.send('/mqtt/sensors', this.sensors);
+      });
+
+      ipc.on('/mqtt/action/subscribe', (event, arg) => {
+        if (this.state.status != 'connected') {
+          fenix.send('/mqtt/error', 'not connected');
+        }
+        else {
+          let sensor = this.sensors[arg];
+
+          if (sensor == undefined) {
+            fenix.send('/mqtt/error', 'sensor not found');
+          }
+          else {
+            this.client.subscribe('/sensors/' + arg + '/#');
+            sensor.subscribed = true;
+            fenix.send('/mqtt/sensor-updated', sensor);
+          }
+        }
+      });
+
+      ipc.on('/mqtt/action/unsubscribe', (event, arg) => {
+        if (this.state.status != 'connected') {
+          fenix.send('/mqtt/error', 'not-connected');
+        }
+        else {
+          let sensor = this.sensors[arg];
+
+          if (sensor == undefined) {
+            fenix.send('/mqtt/error', 'sensor-not-found');
+          }
+          else {
+            this.client.unsubscribe('/sensors/' + arg + '/#');
+            sensor.subscribed = false;
+            fenix.send('/mqtt/sensor-updated', sensor);
+          }
+        }
       });
 
       resolve();
@@ -51,12 +124,22 @@ class MQTTModule extends EventEmitter {
     fenix.send('/mqtt/state', this.state);
   }
 
-  connect(uri) {
+  connect(scheme, host) {
+    if (host == undefined) {
+      host = scheme;
+      scheme = 'mqtt';
+    }
+
+    let uri = `${scheme}://${host}`;
+
     logger.info('connecting to', uri);
 
     this.setState({
       status: 'connecting',
-      uri: uri
+      uri: {
+        scheme: scheme,
+        host: host
+      }
     });
 
     return new Promise((resolve, reject) => {
@@ -68,7 +151,10 @@ class MQTTModule extends EventEmitter {
 
           this.setState({
             status: 'connected',
-            uri: uri
+            uri: {
+              scheme: scheme,
+              host: host
+            }
           });
 
           resolve();
@@ -106,20 +192,20 @@ class MQTTModule extends EventEmitter {
               , m  = re.exec(topic);
 
           if (m != null) {
+            let sensorName  = m[1]
+              , sensor      = this.sensors[sensorName];
+
+            if (sensor == undefined) {
+              sensor = new MQTTSensor(sensorName);
+              this.sensors[sensorName] = sensor;
+
+              fenix.send('/mqtt/sensors', this.sensors);
+            }
+
             if (m[2] == undefined) {
               //
               // Presence
               //
-
-              let sensorName  = m[1]
-                , sensor      = this.sensors[sensorName];
-
-              if (sensor == undefined) {
-                sensor = new MQTTSensor(sensorName);
-                this.sensors[sensorName] = sensor;
-
-                fenix.send('/mqtt/sensors', this.sensors);
-              }
 
               sensor.updateLastPresence();
             }
@@ -127,6 +213,13 @@ class MQTTModule extends EventEmitter {
               //
               // Data
               //
+
+              let dataType = m[2];
+
+              if (sensor.types.indexOf(dataType) == -1) {
+                sensor.types.push(dataType);
+                fenix.send('/mqtt/sensor-updated', sensor);
+              }
 
               logger.debug('data');
             }

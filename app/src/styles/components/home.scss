@@ -1,0 +1,16 @@
+@import '../theme';
+
+.home {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+
+  h1 {
+    flex: 1 1 auto;
+    text-transform: uppercase;
+    font-weight: 300;
+    font-size: 40px;
+    text-align: center;
+    margin-top: -20px;
+  }
+}

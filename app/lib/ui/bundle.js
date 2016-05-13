@@ -46,8 +46,15 @@
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
 
+	var menu = __webpack_require__(1);
+
 	(function () {
-	  var fenix = __webpack_require__(1);
+	  var fenix = __webpack_require__(4);
+
+	  window.addEventListener('contextmenu', function (e) {
+	    e.preventDefault();
+	    menu.popup(remote.getCurrentWindow());
+	  }, false);
 
 	  /*
 	   * Initializing the base tag...
@@ -58,13 +65,7 @@
 	  document.head.appendChild(base);
 
 	  fenix.logger.debug("init fenix");
-	  fenix.init().then(function () {
-	    fenix.logger.debug("init ok");
-	  }, function (err) {
-	    fenix.logger.debug("init failed", err);
-	  }).catch(function (err) {
-	    fenix.logger.error(err);
-	  });
+	  fenix.init();
 	})();
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
@@ -74,15 +75,112 @@
 
 	'use strict';
 
+	var Menu = __webpack_require__(2).remote.Menu;
+
+	var template = [{
+	  label: 'File',
+	  submenu: [{
+	    label: 'Exit',
+	    accelerator: 'CmdOrCtrl+Q',
+	    click: function click(item, focusedWindow) {
+	      console.log('User wanna exit now');
+	    }
+	  }]
+	}, {
+	  label: 'Edit',
+	  submenu: [{
+	    label: 'Undo',
+	    accelerator: 'CmdOrCtrl+Z',
+	    role: 'undo'
+	  }, {
+	    label: 'Redo',
+	    accelerator: 'Shift+CmdOrCtrl+Z',
+	    role: 'redo'
+	  }, {
+	    type: 'separator'
+	  }, {
+	    label: 'Cut',
+	    accelerator: 'CmdOrCtrl+X',
+	    role: 'cut'
+	  }, {
+	    label: 'Copy',
+	    accelerator: 'CmdOrCtrl+C',
+	    role: 'copy'
+	  }, {
+	    label: 'Paste',
+	    accelerator: 'CmdOrCtrl+V',
+	    role: 'paste'
+	  }, {
+	    label: 'Select All',
+	    accelerator: 'CmdOrCtrl+A',
+	    role: 'selectall'
+	  }]
+	}, {
+	  label: 'View',
+	  submenu: [{
+	    label: 'Reload',
+	    accelerator: 'CmdOrCtrl+R',
+	    click: function click(item, focusedWindow) {
+	      if (focusedWindow) focusedWindow.reload();
+	    }
+	  }, {
+	    label: 'Toggle Full Screen',
+	    accelerator: function () {
+	      if (process.platform == 'darwin') return 'Ctrl+Command+F';else return 'F11';
+	    }(),
+	    click: function click(item, focusedWindow) {
+	      if (focusedWindow) focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+	    }
+	  }, {
+	    label: 'Toggle Developer Tools',
+	    accelerator: function () {
+	      if (process.platform == 'darwin') return 'Alt+Command+I';else return 'Ctrl+Shift+I';
+	    }(),
+	    click: function click(item, focusedWindow) {
+	      if (focusedWindow) focusedWindow.toggleDevTools();
+	    }
+	  }]
+	}, {
+	  label: 'Help',
+	  role: 'help',
+	  submenu: [{
+	    label: 'Learn More',
+	    click: function click() {
+	      __webpack_require__(3).openExternal('http://electron.atom.io');
+	    }
+	  }]
+	}];
+
+	var menu = Menu.buildFromTemplate(template);
+	module.exports = menu;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	module.exports = require("electron");
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = require("shell");
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var logger = __webpack_require__(2),
-	    fenixAPI = __webpack_require__(12);
+	var logger = __webpack_require__(5),
+	    fenixAPI = __webpack_require__(15);
 
-	var React = __webpack_require__(14);
-	var reactDOM = __webpack_require__(15);
+	var React = __webpack_require__(16);
+	var ReactDOM = __webpack_require__(17);
 
 	var COMPONENTS = [
 	//  'sensors-list',
@@ -97,16 +195,18 @@
 	  _createClass(FenixUI, [{
 	    key: 'init',
 	    value: function init() {
-	      var _this = this;
+	      logger.info('loading components');
 
-	      return new Promise(function (resolve, reject) {
-	        _this.loadComponents().catch(function (err) {
-	          logger.error(err);reject();
-	        })
-	        //.then(() => { return this.loadAngular(); }, reject)
-	        .then(resolve, reject).catch(function (err) {
-	          logger.error(err);reject();
-	        });
+	      var router = __webpack_require__(18),
+	          RouterProvider = __webpack_require__(21).RouterProvider,
+	          App = __webpack_require__(22);
+
+	      router.start(function () {
+	        ReactDOM.render(React.createElement(
+	          RouterProvider,
+	          { router: router },
+	          React.createElement(App, null)
+	        ), document.getElementById('container'));
 	      });
 	    }
 	  }, {
@@ -115,22 +215,17 @@
 	      return new Promise(function (resolve, reject) {
 	        logger.info('loading components');
 
-	        /*COMPONENTS.forEach(name => {
-	          try {
-	            require(`./components/${name}.js`);
-	            logger.debug(`components "./components/${name}.js" loaded`);
-	          }
-	          catch(err) {
-	            logger.error(`failed to load "./components/${name}.js"`, err);
-	          }
-	        });*/
+	        var MQTTConnectionManager = __webpack_require__(24),
+	            MQTTSensorsList = __webpack_require__(28);
 
-	        var MQTTConnectionManager = __webpack_require__(16),
-	            MQTTSensorsList = __webpack_require__(17);
-
-	        reactDOM.render(React.createElement(MQTTConnectionManager, null), document.getElementById('mqtt-connection-manager'));
-
-	        reactDOM.render(React.createElement(MQTTSensorsList, null), document.getElementById('mqtt-sensors-list'));
+	        /*reactDOM.render(
+	          <MQTTConnectionManager/>,
+	          document.getElementById('mqtt-connection-manager')
+	        );
+	         reactDOM.render(
+	          <MQTTSensorsList/>,
+	          document.getElementById('mqtt-sensors-list')
+	        );*/
 
 	        resolve();
 	      });
@@ -153,13 +248,13 @@
 	module.exports = new FenixUI();
 
 /***/ },
-/* 2 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(3),
-	    winston = __webpack_require__(11);
+	var config = __webpack_require__(6),
+	    winston = __webpack_require__(14);
 
 	module.exports = new winston.Logger({
 	  level: config.logger.level,
@@ -167,7 +262,7 @@
 	});
 
 /***/ },
-/* 3 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -176,29 +271,30 @@
 	 */
 	'use strict';
 
-	var _ = __webpack_require__(4);
+	var _ = __webpack_require__(7);
 	process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-	console.log('env is set to', process.env.NODE_ENV);
+	console.log("Fenix running on electron v" + process.versions.electron);
+	console.log('ENV is set to', process.env.NODE_ENV);
 
 	/**
 	 * Load environment configuration
 	 */
-	module.exports = _.merge(__webpack_require__(5), __webpack_require__(7)("./" + process.env.NODE_ENV + '.js'));
+	module.exports = _.merge(__webpack_require__(8), __webpack_require__(10)("./" + process.env.NODE_ENV + '.js'));
 
 /***/ },
-/* 4 */
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 5 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
 
-	var path = __webpack_require__(6),
+	var path = __webpack_require__(9),
 	    rootPath = path.normalize(__dirname + '/../..');
 
 	module.exports = {
@@ -240,21 +336,21 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 6 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = require("path");
 
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./all.js": 5,
-		"./development.js": 8,
-		"./index.js": 3,
-		"./production.js": 9,
-		"./test.js": 10
+		"./all.js": 8,
+		"./development.js": 11,
+		"./index.js": 6,
+		"./production.js": 12,
+		"./test.js": 13
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -267,11 +363,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 7;
+	webpackContext.id = 10;
 
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -296,7 +392,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -319,7 +415,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -344,13 +440,13 @@
 	};
 
 /***/ },
-/* 11 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = require("winston");
 
 /***/ },
-/* 12 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -359,7 +455,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var ipc = __webpack_require__(13);
+	var ipc = __webpack_require__(2).ipcRenderer;
 
 	var FenixAPI = function () {
 	  function FenixAPI() {
@@ -373,8 +469,12 @@
 	    }
 	  }, {
 	    key: 'send',
-	    value: function send(channel, args) {
-	      ipc.send(channel, args);
+	    value: function send(channel) {
+	      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        args[_key - 1] = arguments[_key];
+	      }
+
+	      ipc.send.apply(ipc, [channel].concat(args));
 	    }
 	  }]);
 
@@ -384,25 +484,69 @@
 	module.exports = new FenixAPI();
 
 /***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	module.exports = require("ipc");
-
-/***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = require("react");
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports) {
 
 	module.exports = require("react-dom");
 
 /***/ },
-/* 16 */
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _router = __webpack_require__(19);
+
+	var _router2 = _interopRequireDefault(_router);
+
+	var _router5Listeners = __webpack_require__(20);
+
+	var _router5Listeners2 = _interopRequireDefault(_router5Listeners);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var router = new _router2.default()
+	//
+	// Options
+	//
+	.setOption('useHash', true).setOption('defaultRoute', 'home')
+	//
+	// Routes
+	//
+	.addNode('home', '/').addNode('mqtt', '/mqtt').addNode('mqtt.sensor', '/sensor/:sensor')
+	//
+	// Plugins
+	//
+	.usePlugin((0, _router5Listeners2.default)());
+
+	module.exports = router;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = require("router5");
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	module.exports = require("router5-listeners");
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = require("react-router5");
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -415,8 +559,120 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var React = __webpack_require__(14),
-	    fenix = __webpack_require__(1);
+	var React = __webpack_require__(16),
+	    Nav = __webpack_require__(23),
+	    Main = __webpack_require__(25);
+
+	var App = function (_React$Component) {
+	  _inherits(App, _React$Component);
+
+	  function App(props) {
+	    _classCallCheck(this, App);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
+	  }
+
+	  _createClass(App, [{
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { id: 'app' },
+	        React.createElement(
+	          'aside',
+	          null,
+	          React.createElement(Nav, null)
+	        ),
+	        React.createElement(
+	          'main',
+	          null,
+	          React.createElement(Main, null)
+	        )
+	      );
+	    }
+	  }]);
+
+	  return App;
+	}(React.Component);
+
+	module.exports = App;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16),
+	    BaseLink = __webpack_require__(21).BaseLink,
+	    withRoute = __webpack_require__(21).withRoute,
+	    MQTTConnectionManager = __webpack_require__(24);
+
+	var Nav = function (_React$Component) {
+	  _inherits(Nav, _React$Component);
+
+	  function Nav(props) {
+	    _classCallCheck(this, Nav);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Nav).call(this, props));
+	  }
+
+	  _createClass(Nav, [{
+	    key: 'render',
+	    value: function render() {
+	      var router = this.props.router;
+
+	      return React.createElement(
+	        'nav',
+	        { id: 'main-nav' },
+	        React.createElement(
+	          BaseLink,
+	          { router: router, routeName: 'mqtt' },
+	          'MQTT'
+	        ),
+	        React.createElement(
+	          'a',
+	          null,
+	          'Database'
+	        ),
+	        React.createElement(
+	          'a',
+	          null,
+	          'Network'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Nav;
+	}(React.Component);
+
+	module.exports = withRoute(Nav);
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16),
+	    fenix = __webpack_require__(4);
 
 	var MQTTConnectionManager = function (_React$Component) {
 	  _inherits(MQTTConnectionManager, _React$Component);
@@ -428,11 +684,14 @@
 
 	    _this.state = {
 	      status: 'disconnected',
-	      uri: '',
+	      uri: {
+	        host: '',
+	        scheme: ''
+	      },
 	      error: null
 	    };
 
-	    fenix.api.on('/mqtt/state', function (state) {
+	    fenix.api.on('/mqtt/state', function (e, state) {
 	      _this.setState(state);
 	    });
 	    return _this;
@@ -441,7 +700,10 @@
 	  _createClass(MQTTConnectionManager, [{
 	    key: 'doConnect',
 	    value: function doConnect() {
-	      fenix.api.send('/mqtt/action/connect', this.refs.mqttServerURI.value);
+	      var host = this.refs.mqttServerHost.value,
+	          scheme = this.refs.mqttServerScheme.value;
+
+	      fenix.api.send('/mqtt/action/connect', scheme, host);
 	    }
 	  }, {
 	    key: 'doDisconnect',
@@ -451,7 +713,14 @@
 	  }, {
 	    key: 'handleChange',
 	    value: function handleChange(event) {
-	      if (this.state.status != 'connected' && this.state.status != 'connecting') this.setState({ uri: event.target.value });
+	      if (this.state.status != 'connected' && this.state.status != 'connecting') this.setState({ uri: { host: event.target.value } });
+	    }
+	  }, {
+	    key: 'keyAction',
+	    value: function keyAction(event) {
+	      if (event.key == 'Enter' && this.state.status != 'connected') {
+	        this.doConnect();
+	      }
 	    }
 	  }, {
 	    key: 'render',
@@ -462,23 +731,37 @@
 	      if (this.state.status == 'connected') {
 	        action = this.doDisconnect.bind(this);
 	        icon = "fa-ban";
+	      } else if (this.state.status == 'connecting') {
+	        action = this.doDisconnect.bind(this);
+	        icon = "fa-spin fa-cog";
 	      } else {
 	        action = this.doConnect.bind(this);
-
-	        if (this.state.status == 'connecting') {
-	          icon = "fa-spin fa-cog";
-	        }
 	      }
 
 	      return React.createElement(
 	        'div',
 	        { className: "mqtt-connection-manager " + this.state.status },
+	        React.createElement(
+	          'select',
+	          { ref: 'mqttServerScheme' },
+	          React.createElement(
+	            'option',
+	            { value: 'mqtt' },
+	            'mqtt://'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'mqtts' },
+	            'mqtts://'
+	          )
+	        ),
 	        React.createElement('input', {
 	          type: 'text',
-	          ref: 'mqttServerURI',
-	          value: this.state.uri,
+	          ref: 'mqttServerHost',
+	          value: this.state.uri.host,
 	          name: 'mqtt-server-uri',
 	          placeholder: 'Enter mqtt server uri...',
+	          onKeyPress: this.keyAction.bind(this),
 	          onChange: this.handleChange.bind(this) }),
 	        React.createElement(
 	          'button',
@@ -495,7 +778,7 @@
 	module.exports = MQTTConnectionManager;
 
 /***/ },
-/* 17 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -508,8 +791,193 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var React = __webpack_require__(14),
-	    fenix = __webpack_require__(1);
+	var React = __webpack_require__(16),
+	    routeNode = __webpack_require__(21).routeNode,
+	    Home = __webpack_require__(26),
+	    MQTT = __webpack_require__(27),
+	    NotFound = __webpack_require__(31);
+
+	var components = {
+	  'home': Home,
+	  'mqtt': MQTT
+	};
+
+	var Main = function (_React$Component) {
+	  _inherits(Main, _React$Component);
+
+	  function Main(props) {
+	    _classCallCheck(this, Main);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
+	  }
+
+	  _createClass(Main, [{
+	    key: 'render',
+	    value: function render() {
+	      var segment = this.props.route.name.split('.')[0],
+	          component = React.createElement(components[segment] || NotFound);
+
+	      return React.createElement(
+	        'div',
+	        { id: 'main' },
+	        component
+	      );
+	    }
+	  }]);
+
+	  return Main;
+	}(React.Component);
+
+	module.exports = routeNode('')(Main);
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16),
+	    routeNode = __webpack_require__(21).routeNode;
+
+	var Home = function (_React$Component) {
+	  _inherits(Home, _React$Component);
+
+	  function Home(props) {
+	    _classCallCheck(this, Home);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Home).call(this, props));
+	  }
+
+	  _createClass(Home, [{
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { className: 'home' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Welcome on Fenix'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Home;
+	}(React.Component);
+
+	module.exports = routeNode('home')(Home);
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16),
+	    routeNode = __webpack_require__(21).routeNode,
+	    fenix = __webpack_require__(4),
+	    MQTTConnectionManager = __webpack_require__(24),
+	    MQTTSensorsList = __webpack_require__(28),
+	    MQTTSensorPanel = __webpack_require__(30);
+
+	var MQTT = function (_React$Component) {
+	  _inherits(MQTT, _React$Component);
+
+	  function MQTT(props) {
+	    _classCallCheck(this, MQTT);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MQTT).call(this, props));
+
+	    _this.state = {
+	      sensors: {}
+	    };
+
+	    fenix.api.on('/mqtt/sensors', function (e, sensors) {
+	      _this.setState({
+	        sensors: sensors
+	      });
+
+	      _this.refs.sensorsList.setState({
+	        sensors: Object.keys(sensors)
+	      });
+	    });
+	    return _this;
+	  }
+
+	  _createClass(MQTT, [{
+	    key: 'render',
+	    value: function render() {
+	      var content = null;
+
+	      if (this.props.route.name == "mqtt") {
+	        content = React.createElement(
+	          'div',
+	          { className: 'help' },
+	          'Please, connect to a server first. Then select a sensor in the list to display informations about it.'
+	        );
+	      } else {
+	        var sensorName = this.props.route.params.sensor || '',
+	            sensor = this.state.sensors[sensorName] || { name: 'unknown' };
+
+	        content = React.createElement(MQTTSensorPanel, { sensor: sensor });
+	      }
+
+	      return React.createElement(
+	        'div',
+	        { id: 'mqtt' },
+	        React.createElement(
+	          'div',
+	          { id: 'main-top-bar' },
+	          React.createElement(MQTTConnectionManager, null)
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'mqtt-content' },
+	          React.createElement(MQTTSensorsList, { ref: 'sensorsList', sensors: Object.keys(this.state.sensors) }),
+	          content
+	        )
+	      );
+	    }
+	  }]);
+
+	  return MQTT;
+	}(React.Component);
+
+	module.exports = routeNode('mqtt')(MQTT);
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16),
+	    MQTTSensor = __webpack_require__(29);
 
 	var MQTTSensorsList = function (_React$Component) {
 	  _inherits(MQTTSensorsList, _React$Component);
@@ -520,14 +988,14 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MQTTSensorsList).call(this, props));
 
 	    _this.state = {
-	      sensors: {}
+	      sensors: props.sensors || []
 	    };
 
-	    fenix.api.on('/mqtt/sensors', function (sensors) {
-	      _this.setState({
+	    /*fenix.api.on('/mqtt/sensors', sensors => {
+	      this.setState({
 	        sensors: sensors
 	      });
-	    });
+	    });*/
 	    return _this;
 	  }
 
@@ -536,17 +1004,13 @@
 	    value: function render() {
 	      var sensors = [];
 
-	      Object.keys(this.state.sensors).forEach(function (k) {
-	        sensors.push(React.createElement(
-	          'li',
-	          null,
-	          k
-	        ));
+	      this.state.sensors.forEach(function (k) {
+	        sensors.push(React.createElement(MQTTSensor, { key: k, name: k }));
 	      });
 
 	      return React.createElement(
-	        'ul',
-	        null,
+	        'div',
+	        { className: 'mqtt-sensors-list nav' },
 	        sensors
 	      );
 	    }
@@ -556,6 +1020,156 @@
 	}(React.Component);
 
 	module.exports = MQTTSensorsList;
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16),
+	    withRoute = __webpack_require__(21).withRoute,
+	    BaseLink = __webpack_require__(21).BaseLink,
+	    fenix = __webpack_require__(4);
+
+	var MQTTSensor = function (_React$Component) {
+	  _inherits(MQTTSensor, _React$Component);
+
+	  function MQTTSensor(props) {
+	    _classCallCheck(this, MQTTSensor);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MQTTSensor).call(this, props));
+	  }
+
+	  _createClass(MQTTSensor, [{
+	    key: 'render',
+	    value: function render() {
+	      var router = this.props.router;
+
+	      return React.createElement(
+	        'div',
+	        { className: 'mqtt-sensor' },
+	        React.createElement(
+	          BaseLink,
+	          { router: router, routeName: 'mqtt.sensor', routeParams: { sensor: this.props.name } },
+	          this.props.name
+	        )
+	      );
+	    }
+	  }]);
+
+	  return MQTTSensor;
+	}(React.Component);
+
+	module.exports = withRoute(MQTTSensor);
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16),
+	    fenix = __webpack_require__(4);
+
+	var MQTTSensorPanel = function (_React$Component) {
+	  _inherits(MQTTSensorPanel, _React$Component);
+
+	  function MQTTSensorPanel(props) {
+	    _classCallCheck(this, MQTTSensorPanel);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MQTTSensorPanel).call(this, props));
+	  }
+
+	  _createClass(MQTTSensorPanel, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var subscribeAction = function subscribeAction() {
+	        console.log("subscribe", _this2.props.sensor.name);
+	        fenix.api.send('/mqtt/action/subscribe', _this2.props.sensor.name);
+	      };
+
+	      return React.createElement(
+	        'div',
+	        { className: "mqtt-sensor-panel" + (this.props.sensor.subscribed ? " subscribed" : "") },
+	        React.createElement(
+	          'h2',
+	          null,
+	          this.props.sensor.name,
+	          ' ',
+	          React.createElement(
+	            'button',
+	            { onClick: subscribeAction },
+	            'Subscribe'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return MQTTSensorPanel;
+	}(React.Component);
+
+	module.exports = MQTTSensorPanel;
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16);
+
+	var NotFound = function (_React$Component) {
+	  _inherits(NotFound, _React$Component);
+
+	  function NotFound(props) {
+	    _classCallCheck(this, NotFound);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(NotFound).call(this, props));
+	  }
+
+	  _createClass(NotFound, [{
+	    key: "render",
+	    value: function render() {
+	      return React.createElement(
+	        "div",
+	        { className: "error" },
+	        "View not found"
+	      );
+	    }
+	  }]);
+
+	  return NotFound;
+	}(React.Component);
+
+	module.exports = NotFound;
 
 /***/ }
 /******/ ]);
