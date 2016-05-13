@@ -62,9 +62,10 @@
 
   select {
     text-align: right;
-    
+
     option {
       background-color: $body-bg;
+      text-align: right;
     }
   }
 

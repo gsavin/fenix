@@ -12,6 +12,16 @@
   margin-top: -20px;
 }
 
+.item-list {
+  display: inline-flex;
+  flex-direction: column;
+}
+.item-list .item {
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #21252b;
+}
+
 nav#main-nav {
   background-color: #21252b;
   display: flex;
@@ -114,6 +124,7 @@ nav#main-nav::after {
 }
 .mqtt-connection-manager select option {
   background-color: #282c34;
+  text-align: right;
 }
 .mqtt-connection-manager button {
   margin-left: 10px;

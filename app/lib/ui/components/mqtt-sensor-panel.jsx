@@ -1,7 +1,8 @@
 'use strict';
 
-const React = require('react')
-    , fenix = require('../fenix-ui.js');
+const React     = require('react')
+    , fenix     = require('../fenix-ui.js')
+    , ItemList  = require('./item-list.jsx');
 
 class MQTTSensorPanel extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class MQTTSensorPanel extends React.Component {
     return (
       <div className={ "mqtt-sensor-panel" + (this.props.sensor.subscribed ? " subscribed" : "") }>
         <h2>{ this.props.sensor.name } <button onClick={ subscribeAction }>Subscribe</button></h2>
+        <ItemList items={ this.props.sensor.types }/>
       </div>
     );
   }

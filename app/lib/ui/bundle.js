@@ -795,7 +795,7 @@
 	    routeNode = __webpack_require__(21).routeNode,
 	    Home = __webpack_require__(26),
 	    MQTT = __webpack_require__(27),
-	    NotFound = __webpack_require__(31);
+	    NotFound = __webpack_require__(32);
 
 	var components = {
 	  'home': Home,
@@ -892,6 +892,7 @@
 
 	var React = __webpack_require__(16),
 	    routeNode = __webpack_require__(21).routeNode,
+	    merge = __webpack_require__(7).merge,
 	    fenix = __webpack_require__(4),
 	    MQTTConnectionManager = __webpack_require__(24),
 	    MQTTSensorsList = __webpack_require__(28),
@@ -917,6 +918,17 @@
 	      _this.refs.sensorsList.setState({
 	        sensors: Object.keys(sensors)
 	      });
+	    });
+
+	    fenix.api.on('/mqtt/sensor-updated', function (e, sensor) {
+	      var update = {
+	        sensors: {}
+	      };
+
+	      update['sensors'][sensor.name] = sensor;
+	      console.log("update", update);
+
+	      _this.setState(merge(_this.state, update));
 	    });
 	    return _this;
 	  }
@@ -1086,7 +1098,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(16),
-	    fenix = __webpack_require__(4);
+	    fenix = __webpack_require__(4),
+	    ItemList = __webpack_require__(31);
 
 	var MQTTSensorPanel = function (_React$Component) {
 	  _inherits(MQTTSensorPanel, _React$Component);
@@ -1120,7 +1133,8 @@
 	            { onClick: subscribeAction },
 	            'Subscribe'
 	          )
-	        )
+	        ),
+	        React.createElement(ItemList, { items: this.props.sensor.types })
 	      );
 	    }
 	  }]);
@@ -1132,6 +1146,73 @@
 
 /***/ },
 /* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(16);
+
+	var ItemList = function (_React$Component) {
+	  _inherits(ItemList, _React$Component);
+
+	  function ItemList(props) {
+	    _classCallCheck(this, ItemList);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemList).call(this, props));
+	  }
+
+	  _createClass(ItemList, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var items = [];
+
+	      if (this.props.items instanceof Array) {
+	        this.props.items.forEach(function (k) {
+	          items.push(React.createElement(
+	            'a',
+	            { className: 'item', key: k },
+	            k
+	          ));
+	        });
+	      } else {
+	        Object.keys(this.props.items).forEach(function (k) {
+	          items.push(React.createElement(
+	            'a',
+	            { className: 'item', key: k },
+	            _this2.props.items[k]
+	          ));
+	        });
+	      }
+
+	      return React.createElement(
+	        'div',
+	        { className: 'item-list' },
+	        items
+	      );
+	    }
+	  }]);
+
+	  return ItemList;
+	}(React.Component);
+
+	ItemList.contextTypes = {
+	  items: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array])
+	};
+
+	module.exports = ItemList;
+
+/***/ },
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

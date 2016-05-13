@@ -2,6 +2,7 @@
 
 const React                 = require('react')
     , routeNode             = require('react-router5').routeNode
+    , merge                 = require('lodash').merge
     , fenix                 = require('../fenix-ui.js')
     , MQTTConnectionManager = require('./mqtt-connection-manager.jsx')
     , MQTTSensorsList       = require('./mqtt-sensors-list.jsx')
@@ -24,6 +25,17 @@ class MQTT extends React.Component {
         sensors: Object.keys(sensors)
       });
     });
+
+    fenix.api.on('/mqtt/sensor-updated', (e, sensor) => {
+      let update = {
+        sensors: {}
+      };
+
+      update['sensors'][sensor.name] = sensor;
+      console.log("update", update);
+
+      this.setState(merge(this.state, update));
+    });
   }
 
   render() {
@@ -35,7 +47,7 @@ class MQTT extends React.Component {
     else {
       let sensorName = this.props.route.params.sensor || ''
         , sensor     = this.state.sensors[sensorName] || {name: 'unknown'};
-      
+
       content = <MQTTSensorPanel sensor={ sensor }/>
     }
 
