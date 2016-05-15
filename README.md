@@ -1,6 +1,6 @@
 # FENIX
 
-![](docs/logo.png)
+![](docs/logo-sm.png)
 
 ## What is Fenix ?
 
