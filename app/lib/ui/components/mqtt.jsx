@@ -32,7 +32,6 @@ class MQTT extends React.Component {
       };
 
       update['sensors'][sensor.name] = sensor;
-      console.log("update", update);
 
       this.setState(merge(this.state, update));
     });

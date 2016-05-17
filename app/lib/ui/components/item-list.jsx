@@ -27,7 +27,7 @@ class ItemList extends React.Component {
   }
 }
 
-ItemList.contextTypes = {
+ItemList.propTypes = {
     items: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array])
 };
 

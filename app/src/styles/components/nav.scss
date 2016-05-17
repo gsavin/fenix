@@ -47,6 +47,16 @@ nav#main-nav {
     .label {
       padding: 0px 10px;
     }
+
+    &.icon-link {
+      padding: 10px;
+
+      svg {
+        height: 42px;
+        width: auto;
+        display: inline-block;
+      }
+    }
   }
 
   ul.nav-right {

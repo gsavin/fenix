@@ -216,7 +216,7 @@
 	        logger.info('loading components');
 
 	        var MQTTConnectionManager = __webpack_require__(24),
-	            MQTTSensorsList = __webpack_require__(28);
+	            MQTTSensorsList = __webpack_require__(29);
 
 	        /*reactDOM.render(
 	          <MQTTConnectionManager/>,
@@ -561,7 +561,7 @@
 
 	var React = __webpack_require__(16),
 	    Nav = __webpack_require__(23),
-	    Main = __webpack_require__(25);
+	    Main = __webpack_require__(26);
 
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -614,7 +614,8 @@
 	var React = __webpack_require__(16),
 	    BaseLink = __webpack_require__(21).BaseLink,
 	    withRoute = __webpack_require__(21).withRoute,
-	    MQTTConnectionManager = __webpack_require__(24);
+	    MQTTConnectionManager = __webpack_require__(24),
+	    Logo = __webpack_require__(25);
 
 	var Nav = function (_React$Component) {
 	  _inherits(Nav, _React$Component);
@@ -633,6 +634,11 @@
 	      return React.createElement(
 	        'nav',
 	        { id: 'main-nav' },
+	        React.createElement(
+	          BaseLink,
+	          { router: router, routeName: 'home', className: 'icon-link' },
+	          React.createElement(Logo, null)
+	        ),
 	        React.createElement(
 	          BaseLink,
 	          { router: router, routeName: 'mqtt' },
@@ -791,11 +797,68 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var React = __webpack_require__(16);
+
+	var Logo = function (_React$Component) {
+	   _inherits(Logo, _React$Component);
+
+	   function Logo() {
+	      _classCallCheck(this, Logo);
+
+	      return _possibleConstructorReturn(this, Object.getPrototypeOf(Logo).apply(this, arguments));
+	   }
+
+	   _createClass(Logo, [{
+	      key: 'render',
+	      value: function render() {
+	         return React.createElement(
+	            'svg',
+	            {
+	               viewBox: '0 0 299.99999 299.68751',
+	               id: 'svg2',
+	               version: '1.1',
+	               className: 'app-logo' },
+	            React.createElement(
+	               'g',
+	               { transform: 'translate(-214.28516,-585.41582)' },
+	               React.createElement('path', {
+	                  d: 'm 364.28516,585.41582 a 150,150 0 0 0 -150,150 150,150 0 0 0 137.52148,149.37501 125,125 0 0 1 -112.52148,-124.37501 125,125 0 0 1 125,-125 125,125 0 0 1 125,125 125,125 0 0 1 -116.15821,124.68751 150,150 0 0 0 141.15821,-149.68751 150,150 0 0 0 -150,-150 z',
+	                  className: 'flame1' }),
+	               React.createElement('path', {
+	                  d: 'm 364.28516,585.41582 a 125,125 0 0 0 -125,125 125,125 0 0 0 115.01758,124.49999 100,100 0 0 1 -90.01758,-99.49999 100,100 0 0 1 100,-100 100,100 0 0 1 100,100 100,100 0 0 1 -92.92578,99.74999 125,125 0 0 0 117.92578,-124.74999 125,125 0 0 0 -125,-125 z',
+	                  className: 'flame2' }),
+	               React.createElement('path', {
+	                  d: 'm 364.28516,585.41582 a 100,100 0 0 0 -100,100 100,100 0 0 0 92.51367,99.625 75,75 0 0 1 -67.51367,-74.625 75,75 0 0 1 75,-75 75,75 0 0 1 75,75 75,75 0 0 1 -69.69336,74.8125 100,100 0 0 0 94.69336,-99.8125 100,100 0 0 0 -100,-100 z',
+	                  className: 'flame3' })
+	            )
+	         );
+	      }
+	   }]);
+
+	   return Logo;
+	}(React.Component);
+
+	module.exports = Logo;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var React = __webpack_require__(16),
 	    routeNode = __webpack_require__(21).routeNode,
-	    Home = __webpack_require__(26),
-	    MQTT = __webpack_require__(27),
-	    NotFound = __webpack_require__(32);
+	    Home = __webpack_require__(27),
+	    MQTT = __webpack_require__(28),
+	    NotFound = __webpack_require__(33);
 
 	var components = {
 	  'home': Home,
@@ -831,10 +894,10 @@
 	module.exports = routeNode('')(Main);
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -845,7 +908,11 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(16),
-	    routeNode = __webpack_require__(21).routeNode;
+	    routeNode = __webpack_require__(21).routeNode,
+	    nativeImage = __webpack_require__(2).nativeImage,
+	    Logo = __webpack_require__(25);
+
+	var icon = nativeImage.createFromPath(__dirname + "/../assets/logo.png");
 
 	var Home = function (_React$Component) {
 	  _inherits(Home, _React$Component);
@@ -863,9 +930,14 @@
 	        'div',
 	        { className: 'home' },
 	        React.createElement(
-	          'h1',
+	          'div',
 	          null,
-	          'Welcome on Fenix'
+	          React.createElement(
+	            'h1',
+	            null,
+	            'Welcome on Fenix'
+	          ),
+	          React.createElement(Logo, null)
 	        )
 	      );
 	    }
@@ -875,9 +947,10 @@
 	}(React.Component);
 
 	module.exports = routeNode('home')(Home);
+	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -895,8 +968,8 @@
 	    merge = __webpack_require__(7).merge,
 	    fenix = __webpack_require__(4),
 	    MQTTConnectionManager = __webpack_require__(24),
-	    MQTTSensorsList = __webpack_require__(28),
-	    MQTTSensorPanel = __webpack_require__(30);
+	    MQTTSensorsList = __webpack_require__(29),
+	    MQTTSensorPanel = __webpack_require__(31);
 
 	var MQTT = function (_React$Component) {
 	  _inherits(MQTT, _React$Component);
@@ -926,7 +999,6 @@
 	      };
 
 	      update['sensors'][sensor.name] = sensor;
-	      console.log("update", update);
 
 	      _this.setState(merge(_this.state, update));
 	    });
@@ -975,7 +1047,7 @@
 	module.exports = routeNode('mqtt')(MQTT);
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -989,7 +1061,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(16),
-	    MQTTSensor = __webpack_require__(29);
+	    MQTTSensor = __webpack_require__(30);
 
 	var MQTTSensorsList = function (_React$Component) {
 	  _inherits(MQTTSensorsList, _React$Component);
@@ -1034,7 +1106,7 @@
 	module.exports = MQTTSensorsList;
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1084,7 +1156,7 @@
 	module.exports = withRoute(MQTTSensor);
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1099,7 +1171,7 @@
 
 	var React = __webpack_require__(16),
 	    fenix = __webpack_require__(4),
-	    ItemList = __webpack_require__(31);
+	    DataWidget = __webpack_require__(32);
 
 	var MQTTSensorPanel = function (_React$Component) {
 	  _inherits(MQTTSensorPanel, _React$Component);
@@ -1116,9 +1188,18 @@
 	      var _this2 = this;
 
 	      var subscribeAction = function subscribeAction() {
-	        console.log("subscribe", _this2.props.sensor.name);
-	        fenix.api.send('/mqtt/action/subscribe', _this2.props.sensor.name);
+	        if (_this2.props.sensor.subscribed) {
+	          fenix.api.send('/mqtt/action/unsubscribe', _this2.props.sensor.name);
+	        } else {
+	          fenix.api.send('/mqtt/action/subscribe', _this2.props.sensor.name);
+	        }
 	      };
+
+	      var widgets = [];
+
+	      Object.keys(this.props.sensor.types).forEach(function (k) {
+	        widgets.push(React.createElement(DataWidget, { data: _this2.props.sensor.types[k], key: _this2.props.sensor.name + '-' + k }));
+	      });
 
 	      return React.createElement(
 	        'div',
@@ -1127,14 +1208,31 @@
 	          'h2',
 	          null,
 	          this.props.sensor.name,
-	          ' ',
 	          React.createElement(
 	            'button',
 	            { onClick: subscribeAction },
-	            'Subscribe'
+	            React.createElement(
+	              'span',
+	              { className: 'subscribed-msg' },
+	              'Subscribed'
+	            ),
+	            React.createElement(
+	              'span',
+	              { className: 'subscribe-action' },
+	              'Subscribe'
+	            ),
+	            React.createElement(
+	              'span',
+	              { className: 'unsubscribe-action' },
+	              'Unsubscribe'
+	            )
 	          )
 	        ),
-	        React.createElement(ItemList, { items: this.props.sensor.types })
+	        React.createElement(
+	          'div',
+	          { className: 'data-widget-container' },
+	          widgets
+	        )
 	      );
 	    }
 	  }]);
@@ -1145,7 +1243,7 @@
 	module.exports = MQTTSensorPanel;
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1160,59 +1258,46 @@
 
 	var React = __webpack_require__(16);
 
-	var ItemList = function (_React$Component) {
-	  _inherits(ItemList, _React$Component);
+	var DataWidget = function (_React$Component) {
+	  _inherits(DataWidget, _React$Component);
 
-	  function ItemList(props) {
-	    _classCallCheck(this, ItemList);
+	  function DataWidget(props) {
+	    _classCallCheck(this, DataWidget);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ItemList).call(this, props));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DataWidget).call(this, props));
 	  }
 
-	  _createClass(ItemList, [{
+	  _createClass(DataWidget, [{
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
-
-	      var items = [];
-
-	      if (this.props.items instanceof Array) {
-	        this.props.items.forEach(function (k) {
-	          items.push(React.createElement(
-	            'a',
-	            { className: 'item', key: k },
-	            k
-	          ));
-	        });
-	      } else {
-	        Object.keys(this.props.items).forEach(function (k) {
-	          items.push(React.createElement(
-	            'a',
-	            { className: 'item', key: k },
-	            _this2.props.items[k]
-	          ));
-	        });
-	      }
-
 	      return React.createElement(
 	        'div',
-	        { className: 'item-list' },
-	        items
+	        { className: 'data-widget' },
+	        React.createElement(
+	          'div',
+	          { className: 'value' },
+	          this.props.data.value
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'type' },
+	          this.props.data.type
+	        )
 	      );
 	    }
 	  }]);
 
-	  return ItemList;
+	  return DataWidget;
 	}(React.Component);
 
-	ItemList.contextTypes = {
-	  items: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.array])
+	DataWidget.propTypes = {
+	  data: React.PropTypes.object.isRequired
 	};
 
-	module.exports = ItemList;
+	module.exports = DataWidget;
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

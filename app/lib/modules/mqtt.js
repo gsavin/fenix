@@ -8,6 +8,13 @@ const mqtt          = require('mqtt')
     , logger        = require('../logger.js')
     , fenix         = require('../fenix');
 
+class MQTTSensorType {
+  constructor(type) {
+    this.type = type;
+    this.value = '';
+  }
+}
+
 /**
  * An MQTT sensor.
  *
@@ -18,13 +25,24 @@ const mqtt          = require('mqtt')
 class MQTTSensor {
   constructor(name) {
     this.name         = name;
-    this.types        = [];
+    this.types        = {};
     this.subscribed   = false;
     this.lastPresence = Date.now();
   }
 
   updateLastPresence() {
     this.lastPresence = Date.now();
+  }
+
+  getOrCreateType(type) {
+    let t = this.types[type];
+
+    if (!t) {
+      t = new MQTTSensorType(type);
+      this.types[type] = t;
+    }
+
+    return t;
   }
 }
 
@@ -214,14 +232,13 @@ class MQTTModule extends EventEmitter {
               // Data
               //
 
-              let dataType = m[2];
+              let dataTypeName = m[2]
+                , dataType     = sensor.getOrCreateType(dataTypeName);
 
-              if (sensor.types.indexOf(dataType) == -1) {
-                sensor.types.push(dataType);
-                fenix.send('/mqtt/sensor-updated', sensor);
-              }
+              dataType.value = message.toString();
 
-              logger.debug('data');
+              fenix.send('/mqtt/sensor-updated', sensor);
+              logger.debug('data', message.toString());
             }
           }
         });

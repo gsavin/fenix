@@ -59,6 +59,10 @@ button {
   }
 }
 
+a, button {
+  transition: background-color,0.3s;
+}
+
 .help {
   padding: 10px;
   color: darken($body-fg, 15%);

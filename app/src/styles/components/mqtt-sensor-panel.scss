@@ -6,5 +6,44 @@
 
   h2 {
     margin-top: 0px;
+
+    button {
+      margin-left: 10px;
+      text-transform: uppercase;
+    }
+  }
+
+  .subscribed-msg {
+    display: none;
+  }
+
+  .unsubscribe-action {
+    display:none;
+  }
+
+  &.subscribed {
+    .subscribed-msg {
+      display: block;
+    }
+
+    .subscribe-action {
+      display: none;
+    }
+
+    h2 button {
+      background-color: $success-color;
+
+      &:hover {
+        background-color: $danger-color;
+        
+        .subscribed-msg {
+          display: none;
+        }
+
+        .unsubscribe-action {
+          display: block;
+        }
+      }
+    }
   }
 }

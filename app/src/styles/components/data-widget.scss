@@ -1,0 +1,26 @@
+@import '../theme';
+
+.data-widget-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.data-widget {
+  border: 3px solid $body-bg-darker;
+  margin: 5px;
+  min-width: 128px;
+
+  .value {
+    font-size: 200%;
+    font-weight: bold;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .type {
+    background-color: $body-bg-darker;
+    text-align: center;
+    padding: 2px 5px;
+  }
+}

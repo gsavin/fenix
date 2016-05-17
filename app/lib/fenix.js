@@ -96,7 +96,10 @@ class FenixApp {
 
           this.logger.info("init " + m.name);
 
-          m.init().then(f, reject).catch(reject);
+          m.init().then(f, reject).catch(err => {
+            this.logger.error(`Unable to init module ${m.name} because "${err}". Some features may be missing or unstable.`);
+            f();
+          });
         }
       };
 

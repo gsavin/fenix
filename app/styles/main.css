@@ -52,6 +52,10 @@ button:hover {
   background-color: #2a51a3;
 }
 
+a, button {
+  transition: background-color,0.3s;
+}
+
 .help {
   padding: 10px;
   color: #c9c9c9;

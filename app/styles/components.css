@@ -3,13 +3,19 @@
   display: flex;
   align-items: center;
 }
-.home h1 {
+.home > div {
   flex: 1 1 auto;
+  text-align: center;
+}
+.home h1 {
   text-transform: uppercase;
   font-weight: 300;
   font-size: 40px;
   text-align: center;
-  margin-top: -20px;
+}
+.home .app-logo {
+  width: 25%;
+  height: auto;
 }
 
 .item-list {
@@ -20,6 +26,22 @@
   display: inline-block;
   padding: 10px;
   border: 1px solid #21252b;
+}
+
+.app-logo .flame1 {
+  fill: #c41a0c;
+  fill-opacity: 1;
+  stroke: none;
+}
+.app-logo .flame2 {
+  fill: #e72727;
+  fill-opacity: 0.41176471;
+  stroke: none;
+}
+.app-logo .flame3 {
+  fill: #c41a0c;
+  fill-opacity: 0.81410259;
+  stroke: none;
 }
 
 nav#main-nav {
@@ -53,6 +75,14 @@ nav#main-nav a:hover {
 nav#main-nav a .label {
   padding: 0px 10px;
 }
+nav#main-nav a.icon-link {
+  padding: 10px;
+}
+nav#main-nav a.icon-link svg {
+  height: 42px;
+  width: auto;
+  display: inline-block;
+}
 nav#main-nav ul.nav-right {
   list-style-type: none;
   margin: 0px;
@@ -62,6 +92,29 @@ nav#main-nav ul.nav-right li {
 }
 nav#main-nav::after {
   clear: both;
+}
+
+.data-widget-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+}
+
+.data-widget {
+  border: 3px solid #21252b;
+  margin: 5px;
+  min-width: 128px;
+}
+.data-widget .value {
+  font-size: 200%;
+  font-weight: bold;
+  padding: 15px;
+  text-align: center;
+}
+.data-widget .type {
+  background-color: #21252b;
+  text-align: center;
+  padding: 2px 5px;
 }
 
 #mqtt {
@@ -146,6 +199,34 @@ nav#main-nav::after {
 }
 .mqtt-sensor-panel h2 {
   margin-top: 0px;
+}
+.mqtt-sensor-panel h2 button {
+  margin-left: 10px;
+  text-transform: uppercase;
+}
+.mqtt-sensor-panel .subscribed-msg {
+  display: none;
+}
+.mqtt-sensor-panel .unsubscribe-action {
+  display: none;
+}
+.mqtt-sensor-panel.subscribed .subscribed-msg {
+  display: block;
+}
+.mqtt-sensor-panel.subscribed .subscribe-action {
+  display: none;
+}
+.mqtt-sensor-panel.subscribed h2 button {
+  background-color: #2aa330;
+}
+.mqtt-sensor-panel.subscribed h2 button:hover {
+  background-color: #b82523;
+}
+.mqtt-sensor-panel.subscribed h2 button:hover .subscribed-msg {
+  display: none;
+}
+.mqtt-sensor-panel.subscribed h2 button:hover .unsubscribe-action {
+  display: block;
 }
 
 .mqtt-sensors-list {

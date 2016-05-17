@@ -3,14 +3,24 @@
 .home {
   flex: 1 1 auto;
   display: flex;
+  //flex-direction: column;
   align-items: center;
 
-  h1 {
+  > div {
     flex: 1 1 auto;
+    text-align: center;
+  }
+
+  h1 {
     text-transform: uppercase;
     font-weight: 300;
     font-size: 40px;
     text-align: center;
-    margin-top: -20px;
+    //margin-top: -20px;
+  }
+
+  .app-logo {
+    width: 25%;
+    height: auto;
   }
 }

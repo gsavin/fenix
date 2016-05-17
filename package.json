@@ -1,6 +1,6 @@
 {
   "name": "fenix",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A sensor exploration and analyze platform",
   "main": "app/main.js",
   "scripts": {
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/gsavin/fenix.git"
   },
-  "keywords": [],
+  "keywords": ["mqtt", "sensor", "monitoring"],
   "author": "Guilhelm Savin",
   "license": "CeCILL-B",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/gsavin/fenix/issues"
   },
-  "homepage": "",
+  "homepage": "https://github.com/gsavin/fenix",
   "devDependencies": {
     "babel-core": "^6.8.0",
     "babel-loader": "^6.2.4",
