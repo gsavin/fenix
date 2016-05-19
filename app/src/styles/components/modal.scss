@@ -1,0 +1,57 @@
+@import '../theme';
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-color: $body-bg-darker;
+  color: $body-fg;
+  box-shadow: 0 0 2em black;
+
+  position: relative;
+  /*top: 50px;
+  bottom: 50px;
+  left: 50px;
+  right: 50px;*/
+  min-width: 25%;
+  /*left: 50%;
+  top: 50px;
+  transform: translate(-50%, -50%);*/
+
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+
+  button.close {
+    background-color: $highlight-color;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+
+    font-size: 24px;
+
+    i {
+      min-width: 24px;
+      text-align: center;
+    }
+
+    border-top-right-radius: 4px;
+
+    &:hover {
+      background-color: $danger-color;
+    }
+  }
+}

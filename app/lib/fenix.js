@@ -4,6 +4,7 @@ var fs            = require('fs')
   , path          = require('path')
   , mongoose      = require('mongoose')
   , BrowserWindow = require('electron').BrowserWindow
+  , ipc           = require('electron').ipcMain
   , config        = require('./config')
   , logger        = require('./logger.js');
 

@@ -1,0 +1,65 @@
+@import '../theme';
+
+input, select, button[role=submit] {
+  background-color: darken($body-bg-darker, 5%);
+  color: $body-fg;
+  border: none;//1px solid darken($body-bg-darker, 5%);
+  border-radius: 4px;
+  margin: 5px;
+}
+
+input::-webkit-input-placeholder {
+  color: lighten($body-bg-darker, 15%);
+}
+
+button[role=submit] {
+    background-color: $highlight-color;
+}
+
+button[role=submit]:hover {
+    background-color: darken($highlight-color, 10%);
+}
+
+input {
+  padding: 5px;
+}
+
+select {
+  padding: 4px;
+}
+
+.select-input-combo {
+  display: flex;
+  align-items: stretch;
+
+  input {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-left: 0px;
+    flex: 1 1 auto;
+  }
+
+  select {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-right: 0px;
+  }
+}
+
+.input-button-combo {
+  display: flex;
+  align-items: stretch;
+
+  button {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-left: 0px;
+  }
+
+  input {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-right: 0px;
+    flex: 1 1 auto;
+  }
+}

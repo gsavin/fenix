@@ -3,14 +3,34 @@
 .mqtt-connection-manager {
   margin-top: auto;
   margin-bottom: auto;
-  padding: 10px;
 
   display: block;
   height:100%;
 
   background-color: $highlight-color;
 
-  text-align: right;
+  //text-align: right;
+
+  .mqtt-status-bar {
+    display: flex;
+    align-items: center;
+
+    .message {
+      display:block;
+      flex: 1 1 auto;
+      padding: 10px;
+
+      i {
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    .toggler {
+      height: 100%;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+  }
 
   &.connected {
     background-color: $success-color;
@@ -74,6 +94,41 @@
 
     &:hover {
       background-color: darken($highlight-color, 10%);
+    }
+
+    &.toggler {
+      border: none;
+      font-size: 20px;
+      display: inline-block;
+    }
+  }
+
+  .mqtt-servers {
+    display: none;
+    justify-content: flex-end;
+    padding: 10px;
+
+    &.opened {
+      display: flex;
+    }
+
+    .mqtt-server {
+      padding: 10px;
+      text-align: center;
+      color: rgba(0,0,0,0.2);
+      width: 85px;
+
+      .mqtt-server-name {
+        padding: 3px;
+      }
+
+      &:hover {
+        color: white;
+      }
+    }
+
+    .mqtt-add-server {
+      align-self: flex-end;
     }
   }
 }

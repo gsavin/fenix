@@ -2,7 +2,8 @@
 
 const app           = require('electron').app
     , BrowserWindow = require('electron').BrowserWindow
-    , fenix         = require('./lib/fenix.js');
+    , fenix         = require('./lib/fenix.js')
+    , config        = require('./lib/config');
 
 //
 // Keep a global reference of the window object, if you don't, the window will
@@ -42,5 +43,6 @@ app.on('ready', function() {
     //
     mainWindow = null;
   });*/
+
   fenix.init();
 });

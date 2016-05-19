@@ -1,3 +1,24 @@
+/*
+ * Copyright 2016
+ *    Guilhelm Savin <guilhelm.savin@litislab.fr>
+ *
+ * This file is part of Fenix.
+ *
+ * This program is free software distributed under the terms of the CeCILL-B
+ * license that fits European law. You can  use, modify and/ or redistribute
+ * the software under the terms of the CeCILL-B license as circulated by CEA,
+ * CNRS and INRIA at the following URL <http://www.cecill.info>.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the CeCILL-B License along with this program.
+ * If not, see <http://www.cecill.info/licences/>.
+ *
+ * The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL-B license and that you accept their terms.
+ */
 'use strict';
 
 const mqtt          = require('mqtt')
@@ -92,44 +113,65 @@ class MQTTModule extends EventEmitter {
         this.disconnect();
       });
 
+      ipc.on('/mqtt/state/get', (event) => {
+        event.returnValue = this.state;
+      });
+
+      ipc.on('/mqtt/sensors/get', (event) => {
+        event.returnValue = this.sensors;
+      });
+
+      ipc.on('/mqtt/servers/add', (event, name, server) => {
+        fenix.config.set(`mqtt.servers.${name}`, server, true);
+        fenix.send('/mqtt/servers', fenix.config.get('mqtt.servers'));
+      });
+
+      ipc.on('/mqtt/servers/get', (event) => {
+        event.returnValue = fenix.config.get('mqtt.servers', {});
+      });
+
       ipc.on('/mqtt/action/refresh', (event, arg) => {
         fenix.send('/mqtt/state', this.state);
         fenix.send('/mqtt/sensors', this.sensors);
       });
 
       ipc.on('/mqtt/action/subscribe', (event, arg) => {
-        if (this.state.status != 'connected') {
-          fenix.send('/mqtt/error', 'not connected');
-        }
-        else {
-          let sensor = this.sensors[arg];
+        let sensor = this.sensors[arg];
 
-          if (sensor == undefined) {
-            fenix.send('/mqtt/error', 'sensor not found');
+        if (sensor == undefined) {
+          fenix.send('/mqtt/error', 'sensor not found');
+        }
+        else if (!sensor.subscribed) {
+          sensor.subscribed = true;
+
+          if (this.state.status != 'connected') {
+            fenix.send('/mqtt/error', 'not connected');
           }
           else {
             this.client.subscribe('/sensors/' + arg + '/#');
-            sensor.subscribed = true;
-            fenix.send('/mqtt/sensor-updated', sensor);
           }
+
+          fenix.send('/mqtt/sensor-updated', sensor);
         }
       });
 
       ipc.on('/mqtt/action/unsubscribe', (event, arg) => {
-        if (this.state.status != 'connected') {
-          fenix.send('/mqtt/error', 'not-connected');
-        }
-        else {
-          let sensor = this.sensors[arg];
+        let sensor = this.sensors[arg];
 
-          if (sensor == undefined) {
-            fenix.send('/mqtt/error', 'sensor-not-found');
+        if (sensor == undefined) {
+          fenix.send('/mqtt/error', 'sensor-not-found');
+        }
+        else if (sensor.subscribed) {
+          sensor.subscribed = false;
+
+          if (this.state.status != 'connected') {
+            fenix.send('/mqtt/error', 'not-connected');
           }
           else {
             this.client.unsubscribe('/sensors/' + arg + '/#');
-            sensor.subscribed = false;
-            fenix.send('/mqtt/sensor-updated', sensor);
           }
+
+          fenix.send('/mqtt/sensor-updated', sensor);
         }
       });
 
@@ -175,6 +217,12 @@ class MQTTModule extends EventEmitter {
             }
           });
 
+          Object.keys(this.sensors).forEach(k => {
+            if (this.sensors[k].subscribed) {
+              this.client.subscribe('/sensors/' + k + '/#');
+            }
+          });
+
           resolve();
         });
 
@@ -209,6 +257,8 @@ class MQTTModule extends EventEmitter {
           const re = /^\/sensors\/([^/]+)(?:\/(.*))?$/
               , m  = re.exec(topic);
 
+          // console.log(topic, message.toString());
+
           if (m != null) {
             let sensorName  = m[1]
               , sensor      = this.sensors[sensorName];
@@ -238,7 +288,6 @@ class MQTTModule extends EventEmitter {
               dataType.value = message.toString();
 
               fenix.send('/mqtt/sensor-updated', sensor);
-              logger.debug('data', message.toString());
             }
           }
         });

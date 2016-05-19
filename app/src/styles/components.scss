@@ -1,12 +1,14 @@
+@import 'components/form.scss';
 @import 'components/home.scss';
 @import 'components/item-list.scss';
 @import 'components/logo.scss';
+@import 'components/modal.scss';
 @import 'components/nav.scss';
 
 @import 'components/data-widget.scss';
 
 @import 'components/mqtt.scss';
 @import 'components/mqtt-connection-manager.scss';
-@import 'components/mqtt-sensor.scss';
 @import 'components/mqtt-sensor-panel.scss';
 @import 'components/mqtt-sensors-list.scss';
+@import 'components/mqtt-sensors-list-item.scss';

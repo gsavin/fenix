@@ -1,3 +1,63 @@
+input, select, button[role=submit] {
+  background-color: #16191d;
+  color: #efefef;
+  border: none;
+  border-radius: 4px;
+  margin: 5px;
+}
+
+input::-webkit-input-placeholder {
+  color: #424a56;
+}
+
+button[role=submit] {
+  background-color: #2a51a3;
+}
+
+button[role=submit]:hover {
+  background-color: #203d7a;
+}
+
+input {
+  padding: 5px;
+}
+
+select {
+  padding: 4px;
+}
+
+.select-input-combo {
+  display: flex;
+  align-items: stretch;
+}
+.select-input-combo input {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  margin-left: 0px;
+  flex: 1 1 auto;
+}
+.select-input-combo select {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-right: 0px;
+}
+
+.input-button-combo {
+  display: flex;
+  align-items: stretch;
+}
+.input-button-combo button {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  margin-left: 0px;
+}
+.input-button-combo input {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-right: 0px;
+  flex: 1 1 auto;
+}
+
 .home {
   flex: 1 1 auto;
   display: flex;
@@ -42,6 +102,53 @@
   fill: #c41a0c;
   fill-opacity: 0.81410259;
   stroke: none;
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-color: #21252b;
+  color: #efefef;
+  box-shadow: 0 0 2em black;
+  position: relative;
+  /*top: 50px;
+  bottom: 50px;
+  left: 50px;
+  right: 50px;*/
+  min-width: 25%;
+  /*left: 50%;
+  top: 50px;
+  transform: translate(-50%, -50%);*/
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+}
+.modal button.close {
+  background-color: #2a51a3;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  font-size: 24px;
+  border-top-right-radius: 4px;
+}
+.modal button.close i {
+  min-width: 24px;
+  text-align: center;
+}
+.modal button.close:hover {
+  background-color: #b82523;
 }
 
 nav#main-nav {
@@ -131,11 +238,26 @@ nav#main-nav::after {
 .mqtt-connection-manager {
   margin-top: auto;
   margin-bottom: auto;
-  padding: 10px;
   display: block;
   height: 100%;
   background-color: #2a51a3;
-  text-align: right;
+}
+.mqtt-connection-manager .mqtt-status-bar {
+  display: flex;
+  align-items: center;
+}
+.mqtt-connection-manager .mqtt-status-bar .message {
+  display: block;
+  flex: 1 1 auto;
+  padding: 10px;
+}
+.mqtt-connection-manager .mqtt-status-bar .message i {
+  color: rgba(0, 0, 0, 0.4);
+}
+.mqtt-connection-manager .mqtt-status-bar .toggler {
+  height: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 .mqtt-connection-manager.connected {
   background-color: #2aa330;
@@ -185,12 +307,33 @@ nav#main-nav::after {
 .mqtt-connection-manager button:hover {
   background-color: #203d7a;
 }
-
-.mqtt-sensor a {
+.mqtt-connection-manager button.toggler {
+  border: none;
+  font-size: 20px;
+  display: inline-block;
+}
+.mqtt-connection-manager .mqtt-servers {
+  display: none;
+  justify-content: flex-end;
   padding: 10px;
-  box-sizing: border-box;
-  display: block;
-  min-width: 150px;
+}
+.mqtt-connection-manager .mqtt-servers.opened {
+  display: flex;
+}
+.mqtt-connection-manager .mqtt-servers .mqtt-server {
+  padding: 10px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.2);
+  width: 85px;
+}
+.mqtt-connection-manager .mqtt-servers .mqtt-server .mqtt-server-name {
+  padding: 3px;
+}
+.mqtt-connection-manager .mqtt-servers .mqtt-server:hover {
+  color: white;
+}
+.mqtt-connection-manager .mqtt-servers .mqtt-add-server {
+  align-self: flex-end;
 }
 
 .mqtt-sensor-panel {
@@ -233,6 +376,23 @@ nav#main-nav::after {
   display: flex;
   flex-direction: column;
   background-color: #21252b;
+}
+
+.mqtt-sensor-list-item a {
+  padding: 10px;
+  box-sizing: border-box;
+  display: block;
+  min-width: 150px;
+}
+.mqtt-sensor-list-item a .subscribed-icon {
+  float: right;
+  display: none;
+  padding-top: 3px;
+  color: #545d6e;
+}
+
+.mqtt-sensor-list-item.subscribed .subscribed-icon {
+  display: inline;
 }
 
 /*# sourceMappingURL=components.css.map */
