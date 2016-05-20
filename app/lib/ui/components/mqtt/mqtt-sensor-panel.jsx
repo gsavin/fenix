@@ -1,8 +1,8 @@
 'use strict';
 
 const React       = require('react')
-    , fenix       = require('../fenix-ui.js')
-    , DataWidget  = require('./data-widget.jsx');
+    , fenix       = require('../../fenix-ui.js')
+    , DataWidget  = require('../data-widget.jsx');
 
 class MQTTSensorPanel extends React.Component {
   constructor(props) {

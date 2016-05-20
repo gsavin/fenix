@@ -3,7 +3,7 @@
 const React     = require('react')
     , withRoute = require('react-router5').withRoute
     , BaseLink  = require('react-router5').BaseLink
-    , fenix     = require('../fenix-ui.js');
+    , fenix     = require('../../fenix-ui.js');
 
 class MQTTSensorsListItem extends React.Component {
   constructor(props) {

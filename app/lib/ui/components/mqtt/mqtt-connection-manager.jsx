@@ -24,7 +24,7 @@
 const React = require('react')
     , Modal = require('react-modal')
     , merge = require('lodash').merge
-    , fenix = require('../fenix-ui.js');
+    , fenix = require('../../fenix-ui.js');
 
 class MQTTConnectionManagerAddServer extends React.Component {
   constructor(props) {

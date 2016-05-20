@@ -1,7 +1,6 @@
 const React                 = require('react')
     , BaseLink              = require('react-router5').BaseLink
     , withRoute             = require('react-router5').withRoute
-    , MQTTConnectionManager = require('./mqtt-connection-manager.jsx')
     , Logo                  = require('./logo.jsx');
 
 class Nav extends React.Component {

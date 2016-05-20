@@ -9,7 +9,7 @@ class DataWidget extends React.Component {
 
   render() {
     return (
-      <div className="data-widget">
+      <div className="data-widget" draggable="true">
         <div className="value">{ this.props.data.value }</div>
         <div className="type">{ this.props.data.type }</div>
       </div>

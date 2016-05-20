@@ -24,7 +24,7 @@
 const React                 = require('react')
     , routeNode             = require('react-router5').routeNode
     , merge                 = require('lodash').merge
-    , fenix                 = require('../fenix-ui.js')
+    , fenix                 = require('../../fenix-ui.js')
     , MQTTConnectionManager = require('./mqtt-connection-manager.jsx')
     , MQTTSensorsList       = require('./mqtt-sensors-list.jsx')
     , MQTTSensorPanel       = require('./mqtt-sensor-panel.jsx');

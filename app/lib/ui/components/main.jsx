@@ -1,7 +1,7 @@
 const React     = require('react')
     , routeNode = require('react-router5').routeNode
     , Home      = require('./home.jsx')
-    , MQTT      = require('./mqtt.jsx')
+    , MQTT      = require('./mqtt/mqtt.jsx')
     , NotFound  = require('./not-found.jsx');
 
 const components = {
