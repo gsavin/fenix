@@ -15,7 +15,8 @@ class Nav extends React.Component {
       <nav id="main-nav">
         <BaseLink router={ router } routeName="home" className="icon-link"><Logo/></BaseLink>
         <BaseLink router={ router } routeName="mqtt">MQTT</BaseLink>
-        <a>Database</a>
+        <BaseLink router={ router } routeName="db">Database</BaseLink>
+        <BaseLink router={ router } routeName="analyze">Analyze</BaseLink>
         <a>Network</a>
       </nav>
     );

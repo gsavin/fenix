@@ -13,6 +13,8 @@ const router = new Router5()
   .addNode('home',        '/')
   .addNode('mqtt',        '/mqtt')
   .addNode('mqtt.sensor', '/sensor/:sensor')
+  .addNode('db',          '/db')
+  .addNode('analyze',     '/analyze')
   //
   // Plugins
   //

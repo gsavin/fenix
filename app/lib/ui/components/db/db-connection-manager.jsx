@@ -27,21 +27,20 @@ const React             = require('react')
     , fenix             = require('../../fenix-ui.js')
     , ConnectionManager = require('../connection-manager.jsx');
 
-class MQTTConnectionManagerAddServer extends ConnectionManager.AddServerComponent {
-  constructor(props) {
-    super(props);
-    this.doAddServer  = this.doAddServer.bind(this);
-  }
-
-  doAddServer() {
+class DBConnectionManagerAddServer extends ConnectionManager.AddServerComponent {
+  doAddServer(e) {
     let server = {
       name: this.refs.serverName.value,
+      host: this.refs.serverHost.value,
       scheme: this.refs.serverScheme.value,
-      host: this.refs.serverHost.value
+      database: this.refs.database.value,
+      username: this.refs.username.value,
+      password: this.refs.password.value
     };
 
-    fenix.api.send('/mqtt/servers/add', server.name, server);
-    this.closeForm();
+    fenix.api.send('/db/servers/add', server.name, server);
+
+    e.preventDefault();
   }
 
   renderForm() {
@@ -50,14 +49,20 @@ class MQTTConnectionManagerAddServer extends ConnectionManager.AddServerComponen
         <h2>Add new server</h2>
         <div className="select-input-combo">
           <select ref="serverScheme">
-            <option value="mqtt">mqtt://</option>
-            <option value="mqtts">mqtts://</option>
+            <option value="mongodb">mongodb://</option>
           </select>
           <input
             type="text"
             ref="serverHost"
-            name="mqtt-server-uri"
+            name="db-server-host"
             placeholder="Server host" />
+        </div>
+        <div>
+          <input type="text" ref="database" placeholder="Database"/>
+        </div>
+        <div>
+          <input type="text" ref="username" placeholder="Username"/>
+          <input type="password" ref="password" placeholder="Password"/>
         </div>
         <div className="input-button-combo">
           <input
@@ -71,21 +76,16 @@ class MQTTConnectionManagerAddServer extends ConnectionManager.AddServerComponen
   }
 }
 
-/**
- * MQTT connection manager component.
- *
- * It allows to display the current state of the MQTT connection and to connect
- * to a server.
- *
- */
-class MQTTConnectionManager extends ConnectionManager {
+class DBConnectionManager extends ConnectionManager {
   constructor(props) {
-    super(props, '/mqtt');
+    super(props, '/db');
+
+    this.serverIcon = "fa-database";
   }
 
   getAddServerComponent() {
-    return MQTTConnectionManagerAddServer;
+    return DBConnectionManagerAddServer;
   }
 }
 
-module.exports = MQTTConnectionManager;
+module.exports = DBConnectionManager;

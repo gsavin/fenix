@@ -23,6 +23,9 @@ body ::shadow {
   display: flex;
   flex: 1 1 auto;
 }
+#app main > div, #app #main > div {
+  flex: 1 1 auto;
+}
 
 input, button {
   padding: 5px;

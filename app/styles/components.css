@@ -201,6 +201,125 @@ nav#main-nav::after {
   clear: both;
 }
 
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  background-color: #282c34;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: #282c34;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+  background-color: #2a51a3;
+}
+
+.connection-manager {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: block;
+  height: 100%;
+  background-color: #2a51a3;
+  transition: background-color,0.5s;
+}
+.connection-manager .status-bar {
+  display: flex;
+  align-items: center;
+}
+.connection-manager .status-bar .message {
+  display: block;
+  flex: 1 1 auto;
+  padding: 10px;
+}
+.connection-manager .status-bar .message i {
+  color: rgba(0, 0, 0, 0.4);
+}
+.connection-manager .status-bar .toggler {
+  height: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.connection-manager.connected {
+  background-color: #2aa330;
+}
+.connection-manager.connected input, .connection-manager.connected select {
+  border: 1px solid #258f2a;
+}
+.connection-manager.connected button {
+  border: 1px solid #258f2a;
+}
+.connection-manager.connected button:hover {
+  background-color: #207a24;
+}
+.connection-manager.error {
+  background-color: #b82523;
+}
+.connection-manager.error input, .connection-manager.error select {
+  border-bottom: 1px solid #a3211f;
+}
+.connection-manager.error button {
+  border: 1px solid #a3211f;
+}
+.connection-manager.error button:hover {
+  background-color: #8d1c1b;
+}
+.connection-manager input, .connection-manager button, .connection-manager select {
+  color: white;
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 6px;
+  border: 1px solid #25478f;
+}
+.connection-manager input, .connection-manager select {
+  font-family: monospace;
+}
+.connection-manager select {
+  text-align: right;
+}
+.connection-manager select option {
+  background-color: #282c34;
+  text-align: right;
+}
+.connection-manager button {
+  margin-left: 10px;
+}
+.connection-manager button:hover {
+  background-color: #203d7a;
+}
+.connection-manager button.toggler {
+  border: none;
+  font-size: 20px;
+  display: inline-block;
+}
+.connection-manager .servers {
+  display: none;
+  justify-content: flex-end;
+  padding: 10px;
+}
+.connection-manager .servers.opened {
+  display: flex;
+}
+.connection-manager .servers .server {
+  padding: 10px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.2);
+  width: 85px;
+}
+.connection-manager .servers .server .server-name {
+  padding: 3px;
+}
+.connection-manager .servers .server:hover {
+  color: white;
+}
+.connection-manager .servers .add-server {
+  align-self: flex-end;
+}
+
 .data-widget-container {
   display: flex;
   flex-direction: row;
@@ -211,6 +330,7 @@ nav#main-nav::after {
   border: 3px solid #21252b;
   margin: 5px;
   min-width: 128px;
+  background-color: #282c34;
 }
 .data-widget .value {
   font-size: 200%;
@@ -233,107 +353,6 @@ nav#main-nav::after {
   display: flex;
   flex-direction: line;
   flex: 1 1 auto;
-}
-
-.mqtt-connection-manager {
-  margin-top: auto;
-  margin-bottom: auto;
-  display: block;
-  height: 100%;
-  background-color: #2a51a3;
-}
-.mqtt-connection-manager .mqtt-status-bar {
-  display: flex;
-  align-items: center;
-}
-.mqtt-connection-manager .mqtt-status-bar .message {
-  display: block;
-  flex: 1 1 auto;
-  padding: 10px;
-}
-.mqtt-connection-manager .mqtt-status-bar .message i {
-  color: rgba(0, 0, 0, 0.4);
-}
-.mqtt-connection-manager .mqtt-status-bar .toggler {
-  height: 100%;
-  padding-right: 10px;
-  padding-left: 10px;
-}
-.mqtt-connection-manager.connected {
-  background-color: #2aa330;
-}
-.mqtt-connection-manager.connected input, .mqtt-connection-manager.connected select {
-  border: 1px solid #258f2a;
-}
-.mqtt-connection-manager.connected button {
-  border: 1px solid #258f2a;
-}
-.mqtt-connection-manager.connected button:hover {
-  background-color: #207a24;
-}
-.mqtt-connection-manager.error {
-  background-color: #b82523;
-}
-.mqtt-connection-manager.error input, .mqtt-connection-manager.error select {
-  border-bottom: 1px solid #a3211f;
-}
-.mqtt-connection-manager.error button {
-  border: 1px solid #a3211f;
-}
-.mqtt-connection-manager.error button:hover {
-  background-color: #8d1c1b;
-}
-.mqtt-connection-manager input, .mqtt-connection-manager button, .mqtt-connection-manager select {
-  color: white;
-  background-color: transparent;
-  font-size: 14px;
-  font-weight: 300;
-  padding: 6px;
-  border: 1px solid #25478f;
-}
-.mqtt-connection-manager input, .mqtt-connection-manager select {
-  font-family: monospace;
-}
-.mqtt-connection-manager select {
-  text-align: right;
-}
-.mqtt-connection-manager select option {
-  background-color: #282c34;
-  text-align: right;
-}
-.mqtt-connection-manager button {
-  margin-left: 10px;
-}
-.mqtt-connection-manager button:hover {
-  background-color: #203d7a;
-}
-.mqtt-connection-manager button.toggler {
-  border: none;
-  font-size: 20px;
-  display: inline-block;
-}
-.mqtt-connection-manager .mqtt-servers {
-  display: none;
-  justify-content: flex-end;
-  padding: 10px;
-}
-.mqtt-connection-manager .mqtt-servers.opened {
-  display: flex;
-}
-.mqtt-connection-manager .mqtt-servers .mqtt-server {
-  padding: 10px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.2);
-  width: 85px;
-}
-.mqtt-connection-manager .mqtt-servers .mqtt-server .mqtt-server-name {
-  padding: 3px;
-}
-.mqtt-connection-manager .mqtt-servers .mqtt-server:hover {
-  color: white;
-}
-.mqtt-connection-manager .mqtt-servers .mqtt-add-server {
-  align-self: flex-end;
 }
 
 .mqtt-sensor-panel {
@@ -376,6 +395,8 @@ nav#main-nav::after {
   display: flex;
   flex-direction: column;
   background-color: #21252b;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .mqtt-sensor-list-item a {

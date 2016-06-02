@@ -46,7 +46,8 @@
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {'use strict';
 
-	var menu = __webpack_require__(1);
+	var menu = __webpack_require__(1),
+	    remote = __webpack_require__(2).remote;
 
 	(function () {
 	  var fenix = __webpack_require__(4);
@@ -521,7 +522,7 @@
 	//
 	// Routes
 	//
-	.addNode('home', '/').addNode('mqtt', '/mqtt').addNode('mqtt.sensor', '/sensor/:sensor')
+	.addNode('home', '/').addNode('mqtt', '/mqtt').addNode('mqtt.sensor', '/sensor/:sensor').addNode('db', '/db')
 	//
 	// Plugins
 	//
@@ -563,7 +564,8 @@
 
 	var React = __webpack_require__(5),
 	    Nav = __webpack_require__(20),
-	    Main = __webpack_require__(22);
+	    Main = __webpack_require__(22),
+	    fenix = __webpack_require__(4);
 
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -571,10 +573,28 @@
 	  function App(props) {
 	    _classCallCheck(this, App);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
+
+	    _this.onError = _this.onError.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(App, [{
+	    key: 'onError',
+	    value: function onError(err) {
+	      console.log("### ERROR ###", err);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      fenix.api.on('/error', this.onError);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      fenix.api.removeListener('/error', this.onError);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return React.createElement(
@@ -646,8 +666,8 @@
 	          'MQTT'
 	        ),
 	        React.createElement(
-	          'a',
-	          null,
+	          BaseLink,
+	          { router: router, routeName: 'db' },
 	          'Database'
 	        ),
 	        React.createElement(
@@ -739,11 +759,13 @@
 	    routeNode = __webpack_require__(18).routeNode,
 	    Home = __webpack_require__(23),
 	    MQTT = __webpack_require__(24),
-	    NotFound = __webpack_require__(31);
+	    DB = __webpack_require__(32),
+	    NotFound = __webpack_require__(34);
 
 	var components = {
 	  'home': Home,
-	  'mqtt': MQTT
+	  'mqtt': MQTT,
+	  'db': DB
 	};
 
 	var Main = function (_React$Component) {
@@ -870,8 +892,8 @@
 	    merge = __webpack_require__(12).merge,
 	    fenix = __webpack_require__(4),
 	    MQTTConnectionManager = __webpack_require__(25),
-	    MQTTSensorsList = __webpack_require__(27),
-	    MQTTSensorPanel = __webpack_require__(29);
+	    MQTTSensorsList = __webpack_require__(28),
+	    MQTTSensorPanel = __webpack_require__(30);
 
 	/**
 	 * Main MQTT component.
@@ -915,8 +937,6 @@
 	        sensors: sensors
 	      });
 
-	      console.log(sensors);
-
 	      this.refs.sensorsList.setState({
 	        sensors: sensors
 	      });
@@ -954,8 +974,6 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      console.log("mount");
-
 	      fenix.api.on('/mqtt/sensors', this.onMQTTSensors);
 	      fenix.api.on('/mqtt/sensor-updated', this.onMQTTSensorUpdated);
 
@@ -973,8 +991,6 @@
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      console.log("unmount");
-
 	      fenix.api.removeListener('/mqtt/sensors', this.onMQTTSensors);
 	      fenix.api.removeListener('/mqtt/sensor-updated', this.onMQTTSensorUpdated);
 	    }
@@ -1065,39 +1081,22 @@
 	var React = __webpack_require__(5),
 	    Modal = __webpack_require__(26),
 	    merge = __webpack_require__(12).merge,
-	    fenix = __webpack_require__(4);
+	    fenix = __webpack_require__(4),
+	    ConnectionManager = __webpack_require__(27);
 
-	var MQTTConnectionManagerAddServer = function (_React$Component) {
-	  _inherits(MQTTConnectionManagerAddServer, _React$Component);
+	var MQTTConnectionManagerAddServer = function (_ConnectionManager$Ad) {
+	  _inherits(MQTTConnectionManagerAddServer, _ConnectionManager$Ad);
 
 	  function MQTTConnectionManagerAddServer(props) {
 	    _classCallCheck(this, MQTTConnectionManagerAddServer);
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MQTTConnectionManagerAddServer).call(this, props));
 
-	    _this.state = {
-	      formIsOpened: false
-	    };
-
 	    _this.doAddServer = _this.doAddServer.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(MQTTConnectionManagerAddServer, [{
-	    key: 'openForm',
-	    value: function openForm() {
-	      this.setState({
-	        formIsOpened: true
-	      });
-	    }
-	  }, {
-	    key: 'closeForm',
-	    value: function closeForm() {
-	      this.setState({
-	        formIsOpened: false
-	      });
-	    }
-	  }, {
 	    key: 'doAddServer',
 	    value: function doAddServer() {
 	      var server = {
@@ -1110,62 +1109,50 @@
 	      this.closeForm();
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
+	    key: 'renderForm',
+	    value: function renderForm() {
 	      return React.createElement(
-	        'div',
-	        { className: 'mqtt-connection-manager-add-server' },
+	        'form',
+	        { onSubmit: this.doAddServer },
 	        React.createElement(
-	          Modal,
-	          {
-	            isOpen: this.state.formIsOpened,
-	            className: 'modal',
-	            overlayClassName: 'modal-overlay' },
+	          'h2',
+	          null,
+	          'Add new server'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'select-input-combo' },
+	          React.createElement(
+	            'select',
+	            { ref: 'serverScheme' },
+	            React.createElement(
+	              'option',
+	              { value: 'mqtt' },
+	              'mqtt://'
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'mqtts' },
+	              'mqtts://'
+	            )
+	          ),
+	          React.createElement('input', {
+	            type: 'text',
+	            ref: 'serverHost',
+	            name: 'mqtt-server-uri',
+	            placeholder: 'Server host' })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input-button-combo' },
+	          React.createElement('input', {
+	            type: 'text',
+	            ref: 'serverName',
+	            placeholder: 'Name' }),
 	          React.createElement(
 	            'button',
-	            { onClick: this.closeForm.bind(this), className: 'close' },
-	            React.createElement('i', { className: 'fa fa-times-circle' })
-	          ),
-	          React.createElement(
-	            'h2',
-	            null,
-	            'Add new server'
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'select-input-combo' },
-	            React.createElement(
-	              'select',
-	              { ref: 'serverScheme' },
-	              React.createElement(
-	                'option',
-	                { value: 'mqtt' },
-	                'mqtt://'
-	              ),
-	              React.createElement(
-	                'option',
-	                { value: 'mqtts' },
-	                'mqtts://'
-	              )
-	            ),
-	            React.createElement('input', {
-	              type: 'text',
-	              ref: 'serverHost',
-	              name: 'mqtt-server-uri',
-	              placeholder: 'Server host' })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'input-button-combo' },
-	            React.createElement('input', {
-	              type: 'text',
-	              ref: 'serverName',
-	              placeholder: 'Name' }),
-	            React.createElement(
-	              'button',
-	              { role: 'submit', onClick: this.doAddServer },
-	              'Add server'
-	            )
+	            { role: 'submit' },
+	            'Add server'
 	          )
 	        )
 	      );
@@ -1173,13 +1160,7 @@
 	  }]);
 
 	  return MQTTConnectionManagerAddServer;
-	}(React.Component);
-
-	var statusIcons = {
-	  'connected': 'fa-plug',
-	  'connecting': 'fa-spin fa-cog',
-	  'disconnected': 'fa-ban'
-	};
+	}(ConnectionManager.AddServerComponent);
 
 	/**
 	 * MQTT connection manager component.
@@ -1189,220 +1170,25 @@
 	 *
 	 */
 
-	var MQTTConnectionManager = function (_React$Component2) {
-	  _inherits(MQTTConnectionManager, _React$Component2);
+
+	var MQTTConnectionManager = function (_ConnectionManager) {
+	  _inherits(MQTTConnectionManager, _ConnectionManager);
 
 	  function MQTTConnectionManager(props) {
 	    _classCallCheck(this, MQTTConnectionManager);
 
-	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(MQTTConnectionManager).call(this, props));
-
-	    _this2.state = {
-	      state: fenix.api.get('/mqtt/state/get'),
-	      servers: fenix.api.get('/mqtt/servers/get')
-	    };
-
-	    _this2.onMQTTState = _this2.onMQTTState.bind(_this2);
-	    _this2.onMQTTServers = _this2.onMQTTServers.bind(_this2);
-	    return _this2;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MQTTConnectionManager).call(this, props, '/mqtt'));
 	  }
 
-	  /**
-	   * Listener for the '/mqtt/state' channel.
-	   *
-	   */
-
-
 	  _createClass(MQTTConnectionManager, [{
-	    key: 'onMQTTState',
-	    value: function onMQTTState(e, state) {
-	      var u = {
-	        state: state
-	      };
-
-	      this.setState(merge(this.state, u));
-	    }
-	  }, {
-	    key: 'onMQTTServers',
-	    value: function onMQTTServers(e, servers) {
-	      var u = {
-	        servers: servers
-	      };
-
-	      this.setState(merge(this.state, u));
-	    }
-
-	    /**
-	     *  Method called by React when the component did mount.
-	     *
-	     * More informations about component lifecycle are available [here](https://facebook.github.io/react/docs/component-specs.html).
-	     * When MQTTConnectionManager has been mount, it registers its listeners for
-	     * MQTT state updates and asks for a refresh.
-	     *
-	     */
-
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      fenix.api.on('/mqtt/state', this.onMQTTState);
-	      fenix.api.on('/mqtt/servers', this.onMQTTServers);
-	    }
-
-	    /**
-	     * Method called by React when the component will unmount.
-	     *
-	     * More informations about component lifecycle are available [here](https://facebook.github.io/react/docs/component-specs.html).
-	     * Before MQTT will unmount, it removes its listeners from MQTT updates.
-	     *
-	     */
-
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      fenix.api.removeListener('/mqtt/state', this.onMQTTState);
-	      fenix.api.removeListener('/mqtt/servers', this.onMQTTServers);
-	    }
-	  }, {
-	    key: 'doConnect',
-	    value: function doConnect() {
-	      var host = this.refs.mqttServerHost.value,
-	          scheme = this.refs.mqttServerScheme.value;
-
-	      fenix.api.send('/mqtt/action/connect', scheme, host);
-	    }
-	  }, {
-	    key: 'doDisconnect',
-	    value: function doDisconnect() {
-	      fenix.api.send('/mqtt/action/disconnect');
-	    }
-	  }, {
-	    key: 'connectTo',
-	    value: function connectTo(serverName) {
-	      var server = this.state.servers[serverName];
-
-	      if (server) {
-	        fenix.api.send('/mqtt/action/connect', server.scheme, server.host);
-	      }
-
-	      this.refs.mqttServers.classList.remove('opened');
-	    }
-	  }, {
-	    key: 'handleChange',
-	    value: function handleChange(event) {
-	      if (this.state.status != 'connected' && this.state.status != 'connecting') this.setState({ uri: { host: event.target.value } });
-	    }
-	  }, {
-	    key: 'keyAction',
-	    value: function keyAction(event) {
-	      if (event.key == 'Enter' && this.state.status != 'connected') {
-	        this.doConnect();
-	      }
-	    }
-	  }, {
-	    key: 'openForm',
-	    value: function openForm() {
-	      this.refs.addServer.openForm();
-	    }
-
-	    /**
-	     * Method called by React when rendering the component.
-	     *
-	     * More informations about component lifecycle are available [here](https://facebook.github.io/react/docs/component-specs.html).
-	     *
-	     */
-
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this3 = this;
-
-	      var icon = statusIcons[this.state.state.status];
-
-	      var toggler = function toggler() {
-	        _this3.refs.mqttServers.classList.toggle('opened');
-	      };
-
-	      var serversComponents = [];
-
-	      var message = '';
-
-	      switch (this.state.state.status) {
-	        case 'connected':
-	          message = 'Connected to ' + this.state.state.uri.host;
-	          break;
-	        case 'connecting':
-	          message = 'Trying to connect to ' + this.state.state.uri.host;
-	          break;
-	        case 'disconnected':
-	          message = 'You are not connected';
-	          break;
-	        case 'error':
-	          message = 'An error occured "' + this.state.state.error + '"';
-	          break;
-	        default:
-	          message = '';
-	          break;
-	      }
-
-	      Object.keys(this.state.servers).forEach(function (name) {
-	        var server = _this3.state.servers[name],
-	            action = _this3.connectTo.bind(_this3, name);
-
-	        serversComponents.push(React.createElement(
-	          'button',
-	          { className: 'mqtt-server', key: server.name, onClick: action },
-	          React.createElement('i', { className: 'fa fa-3x fa-server' }),
-	          React.createElement(
-	            'div',
-	            { className: 'mqtt-server-name' },
-	            server.name
-	          )
-	        ));
-	      });
-
-	      return React.createElement(
-	        'div',
-	        { className: "mqtt-connection-manager " + this.state.state.status },
-	        React.createElement(
-	          'div',
-	          { className: 'mqtt-status-bar' },
-	          React.createElement(
-	            'span',
-	            { className: 'message' },
-	            React.createElement('i', { className: "fa fa-lg fa-fw " + icon }),
-	            ' ',
-	            message
-	          ),
-	          React.createElement(
-	            'button',
-	            { onClick: toggler, className: 'toggler' },
-	            React.createElement('i', { className: 'fa fa-lg fa-caret-down' })
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { ref: 'mqttServers', className: 'mqtt-servers' },
-	          serversComponents,
-	          React.createElement(
-	            'button',
-	            {
-	              onClick: this.openForm.bind(this),
-	              className: 'mqtt-server mqtt-add-server' },
-	            React.createElement('i', { className: 'fa fa-3x fa-plus' }),
-	            React.createElement(
-	              'div',
-	              { className: 'mqtt-server-name' },
-	              'new'
-	            )
-	          ),
-	          React.createElement(MQTTConnectionManagerAddServer, { ref: 'addServer' })
-	        )
-	      );
+	    key: 'getAddServerComponent',
+	    value: function getAddServerComponent() {
+	      return MQTTConnectionManagerAddServer;
 	    }
 	  }]);
 
 	  return MQTTConnectionManager;
-	}(React.Component);
+	}(ConnectionManager);
 
 	module.exports = MQTTConnectionManager;
 
@@ -1448,7 +1234,352 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(5),
-	    MQTTSensorsListItem = __webpack_require__(28);
+	    Modal = __webpack_require__(26),
+	    merge = __webpack_require__(12).merge,
+	    fenix = __webpack_require__(4);
+
+	var statusIcons = {
+	  'connected': 'fa-plug',
+	  'connecting': 'fa-spin fa-cog',
+	  'disconnected': 'fa-ban'
+	};
+
+	var ConnectionManagerAddServer = function (_React$Component) {
+	  _inherits(ConnectionManagerAddServer, _React$Component);
+
+	  function ConnectionManagerAddServer(props) {
+	    _classCallCheck(this, ConnectionManagerAddServer);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ConnectionManagerAddServer).call(this, props));
+
+	    _this.state = {
+	      opened: false
+	    };
+
+	    _this.closeForm = _this.closeForm.bind(_this);
+	    _this.openForm = _this.openForm.bind(_this);
+	    _this.doAddServer = _this.doAddServer.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(ConnectionManagerAddServer, [{
+	    key: 'openForm',
+	    value: function openForm() {
+	      this.setState({
+	        opened: true
+	      });
+	    }
+	  }, {
+	    key: 'closeForm',
+	    value: function closeForm() {
+	      this.setState({
+	        opened: false
+	      });
+	    }
+	  }, {
+	    key: 'toggleForm',
+	    value: function toggleForm() {
+	      this.setState({
+	        opened: !this.state.opened
+	      });
+	    }
+	  }, {
+	    key: 'doAddServer',
+	    value: function doAddServer() {
+	      // Abstract method
+	    }
+	  }, {
+	    key: 'renderForm',
+	    value: function renderForm() {
+	      return null;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { className: 'mqtt-connection-manager-add-server' },
+	        React.createElement(
+	          Modal,
+	          {
+	            isOpen: this.state.opened,
+	            className: 'modal',
+	            overlayClassName: 'modal-overlay' },
+	          React.createElement(
+	            'button',
+	            { onClick: this.closeForm.bind(this), className: 'close' },
+	            React.createElement('i', { className: 'fa fa-times-circle' })
+	          ),
+	          this.renderForm()
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ConnectionManagerAddServer;
+	}(React.Component);
+
+	var ConnectionManager = function (_React$Component2) {
+	  _inherits(ConnectionManager, _React$Component2);
+
+	  function ConnectionManager(props, prefix) {
+	    _classCallCheck(this, ConnectionManager);
+
+	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(ConnectionManager).call(this, props));
+
+	    _this2.prefix = prefix;
+
+	    _this2.serverIcon = "fa-server";
+
+	    _this2.state = {
+	      state: fenix.api.get(prefix + '/state/get'),
+	      servers: fenix.api.get(prefix + '/servers/get')
+	    };
+
+	    _this2.onState = _this2.onState.bind(_this2);
+	    _this2.onServers = _this2.onServers.bind(_this2);
+	    _this2.openAddServerForm = _this2.openAddServerForm.bind(_this2);
+	    return _this2;
+	  }
+
+	  /**
+	   * Listener for the '/mqtt/state' channel.
+	   *
+	   */
+
+
+	  _createClass(ConnectionManager, [{
+	    key: 'onState',
+	    value: function onState(e, state) {
+	      var u = {
+	        state: state
+	      };
+
+	      this.setState(merge(this.state, u));
+	    }
+	  }, {
+	    key: 'onServers',
+	    value: function onServers(e, servers) {
+	      var u = {
+	        servers: servers
+	      };
+
+	      this.setState(merge(this.state, u));
+	    }
+
+	    /**
+	     *  Method called by React when the component did mount.
+	     *
+	     * More informations about component lifecycle are available [here](https://facebook.github.io/react/docs/component-specs.html).
+	     * When MQTTConnectionManager has been mount, it registers its listeners for
+	     * MQTT state updates and asks for a refresh.
+	     *
+	     */
+
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      fenix.api.on(this.prefix + '/state', this.onState);
+	      fenix.api.on(this.prefix + '/servers', this.onServers);
+	    }
+
+	    /**
+	     * Method called by React when the component will unmount.
+	     *
+	     * More informations about component lifecycle are available [here](https://facebook.github.io/react/docs/component-specs.html).
+	     * Before MQTT will unmount, it removes its listeners from MQTT updates.
+	     *
+	     */
+
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      fenix.api.removeListener(this.prefix + '/state', this.onState);
+	      fenix.api.removeListener(this.prefix + '/servers', this.onServers);
+	    }
+	  }, {
+	    key: 'getConnectionMessage',
+	    value: function getConnectionMessage() {
+	      var message = '';
+
+	      switch (this.state.state.status) {
+	        case 'connected':
+	          message = 'Connected to ' + this.state.state.uri.host;
+	          break;
+	        case 'connecting':
+	          message = 'Trying to connect to ' + this.state.state.uri.host;
+	          break;
+	        case 'disconnected':
+	          message = 'You are not connected';
+	          break;
+	        case 'error':
+	          message = 'An error occured "' + this.state.state.error + '"';
+	          break;
+	        default:
+	          message = '';
+	          break;
+	      }
+
+	      return message;
+	    }
+	  }, {
+	    key: 'doDisconnect',
+	    value: function doDisconnect() {
+	      fenix.api.send(this.prefix + '/action/disconnect');
+	    }
+	  }, {
+	    key: 'connectTo',
+	    value: function connectTo(serverName) {
+	      var server = this.state.servers[serverName];
+
+	      if (server) {
+	        fenix.api.send(this.prefix + '/action/connect', server);
+	      }
+
+	      this.refs.servers.classList.remove('opened');
+	    }
+	  }, {
+	    key: 'getAddServerComponent',
+	    value: function getAddServerComponent() {
+	      return this.AddServerComponent;
+	    }
+	  }, {
+	    key: 'openAddServerForm',
+	    value: function openAddServerForm() {
+	      this.refs.addServer.openForm();
+	    }
+	  }, {
+	    key: 'renderServerComponent',
+	    value: function renderServerComponent(server, action) {
+	      return React.createElement(
+	        'button',
+	        { className: 'server', key: server.name, onClick: action },
+	        React.createElement('i', { className: "fa fa-3x " + this.serverIcon }),
+	        React.createElement(
+	          'div',
+	          { className: 'server-name' },
+	          server.name
+	        )
+	      );
+	    }
+
+	    /**
+	     * Method called by React when rendering the component.
+	     *
+	     * More informations about component lifecycle are available [here](https://facebook.github.io/react/docs/component-specs.html).
+	     *
+	     */
+
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
+
+	      var icon = statusIcons[this.state.state.status];
+
+	      var toggler = function toggler() {
+	        _this3.refs.servers.classList.toggle('opened');
+	      };
+
+	      var serversComponents = [];
+	      var message = this.getConnectionMessage();
+	      var AddServer = this.getAddServerComponent();
+
+	      Object.keys(this.state.servers).forEach(function (name) {
+	        var server = _this3.state.servers[name],
+	            action = _this3.connectTo.bind(_this3, name);
+
+	        serversComponents.push(_this3.renderServerComponent(server, action));
+	      });
+
+	      return React.createElement(
+	        'div',
+	        { className: "connection-manager " + this.state.state.status },
+	        React.createElement(
+	          'div',
+	          { className: 'status-bar' },
+	          React.createElement(
+	            'span',
+	            { className: 'message' },
+	            React.createElement('i', { className: "fa fa-lg fa-fw " + icon }),
+	            ' ',
+	            message
+	          ),
+	          React.createElement(
+	            'button',
+	            { onClick: toggler, className: 'toggler' },
+	            React.createElement('i', { className: 'fa fa-lg fa-caret-down' })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { ref: 'servers', className: "servers" + (this.state.state.status == 'disconnected' ? ' opened' : '') },
+	          serversComponents,
+	          React.createElement(
+	            'button',
+	            {
+	              onClick: this.openAddServerForm,
+	              className: 'server add-server' },
+	            React.createElement('i', { className: 'fa fa-3x fa-plus' }),
+	            React.createElement(
+	              'div',
+	              { className: 'server-name' },
+	              'new'
+	            )
+	          ),
+	          React.createElement(AddServer, { ref: 'addServer' })
+	        )
+	      );
+	    }
+	  }], [{
+	    key: 'AddServerComponent',
+	    get: function get() {
+	      return ConnectionManagerAddServer;
+	    }
+	  }]);
+
+	  return ConnectionManager;
+	}(React.Component);
+
+	module.exports = ConnectionManager;
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Copyright 2016
+	 *    Guilhelm Savin <guilhelm.savin@litislab.fr>
+	 *
+	 * This file is part of Fenix.
+	 *
+	 * This program is free software distributed under the terms of the CeCILL-B
+	 * license that fits European law. You can  use, modify and/ or redistribute
+	 * the software under the terms of the CeCILL-B license as circulated by CEA,
+	 * CNRS and INRIA at the following URL <http://www.cecill.info>.
+	 *
+	 * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+	 * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+	 * PARTICULAR PURPOSE.
+	 *
+	 * You should have received a copy of the CeCILL-B License along with this program.
+	 * If not, see <http://www.cecill.info/licences/>.
+	 *
+	 * The fact that you are presently reading this means that you have had
+	 * knowledge of the CeCILL-B license and that you accept their terms.
+	 */
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(5),
+	    MQTTSensorsListItem = __webpack_require__(29);
 
 	/**
 	 * A navigable list of sensors.
@@ -1506,7 +1637,7 @@
 	module.exports = MQTTSensorsList;
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1557,7 +1688,7 @@
 	module.exports = withRoute(MQTTSensorsListItem);
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1572,7 +1703,7 @@
 
 	var React = __webpack_require__(5),
 	    fenix = __webpack_require__(4),
-	    DataWidget = __webpack_require__(30);
+	    DataWidget = __webpack_require__(31);
 
 	var MQTTSensorPanel = function (_React$Component) {
 	  _inherits(MQTTSensorPanel, _React$Component);
@@ -1644,7 +1775,7 @@
 	module.exports = MQTTSensorPanel;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1698,7 +1829,227 @@
 	module.exports = DataWidget;
 
 /***/ },
-/* 31 */
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Copyright 2016
+	 *    Guilhelm Savin <guilhelm.savin@litislab.fr>
+	 *
+	 * This file is part of Fenix.
+	 *
+	 * This program is free software distributed under the terms of the CeCILL-B
+	 * license that fits European law. You can  use, modify and/ or redistribute
+	 * the software under the terms of the CeCILL-B license as circulated by CEA,
+	 * CNRS and INRIA at the following URL <http://www.cecill.info>.
+	 *
+	 * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+	 * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+	 * PARTICULAR PURPOSE.
+	 *
+	 * You should have received a copy of the CeCILL-B License along with this program.
+	 * If not, see <http://www.cecill.info/licences/>.
+	 *
+	 * The fact that you are presently reading this means that you have had
+	 * knowledge of the CeCILL-B license and that you accept their terms.
+	 */
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(5),
+	    routeNode = __webpack_require__(18).routeNode,
+	    merge = __webpack_require__(12).merge,
+	    fenix = __webpack_require__(4),
+	    DBConnectionManager = __webpack_require__(33);
+
+	var DB = function (_React$Component) {
+	  _inherits(DB, _React$Component);
+
+	  function DB(props) {
+	    _classCallCheck(this, DB);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DB).call(this, props));
+	  }
+
+	  _createClass(DB, [{
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { className: 'db' },
+	        React.createElement(
+	          'div',
+	          { id: 'main-top-bar' },
+	          React.createElement(DBConnectionManager, null)
+	        )
+	      );
+	    }
+	  }]);
+
+	  return DB;
+	}(React.Component);
+
+	module.exports = routeNode('db')(DB);
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Copyright 2016
+	 *    Guilhelm Savin <guilhelm.savin@litislab.fr>
+	 *
+	 * This file is part of Fenix.
+	 *
+	 * This program is free software distributed under the terms of the CeCILL-B
+	 * license that fits European law. You can  use, modify and/ or redistribute
+	 * the software under the terms of the CeCILL-B license as circulated by CEA,
+	 * CNRS and INRIA at the following URL <http://www.cecill.info>.
+	 *
+	 * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+	 * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+	 * PARTICULAR PURPOSE.
+	 *
+	 * You should have received a copy of the CeCILL-B License along with this program.
+	 * If not, see <http://www.cecill.info/licences/>.
+	 *
+	 * The fact that you are presently reading this means that you have had
+	 * knowledge of the CeCILL-B license and that you accept their terms.
+	 */
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(5),
+	    Modal = __webpack_require__(26),
+	    merge = __webpack_require__(12).merge,
+	    fenix = __webpack_require__(4),
+	    ConnectionManager = __webpack_require__(27);
+
+	var DBConnectionManagerAddServer = function (_ConnectionManager$Ad) {
+	  _inherits(DBConnectionManagerAddServer, _ConnectionManager$Ad);
+
+	  function DBConnectionManagerAddServer() {
+	    _classCallCheck(this, DBConnectionManagerAddServer);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DBConnectionManagerAddServer).apply(this, arguments));
+	  }
+
+	  _createClass(DBConnectionManagerAddServer, [{
+	    key: 'doAddServer',
+	    value: function doAddServer(e) {
+	      var server = {
+	        name: this.refs.serverName.value,
+	        host: this.refs.serverHost.value,
+	        scheme: this.refs.serverScheme.value,
+	        database: this.refs.database.value,
+	        username: this.refs.username.value,
+	        password: this.refs.password.value
+	      };
+
+	      fenix.api.send('/db/servers/add', server.name, server);
+
+	      e.preventDefault();
+	    }
+	  }, {
+	    key: 'renderForm',
+	    value: function renderForm() {
+	      return React.createElement(
+	        'form',
+	        { onSubmit: this.doAddServer },
+	        React.createElement(
+	          'h2',
+	          null,
+	          'Add new server'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'select-input-combo' },
+	          React.createElement(
+	            'select',
+	            { ref: 'serverScheme' },
+	            React.createElement(
+	              'option',
+	              { value: 'mongodb' },
+	              'mongodb://'
+	            )
+	          ),
+	          React.createElement('input', {
+	            type: 'text',
+	            ref: 'serverHost',
+	            name: 'db-server-host',
+	            placeholder: 'Server host' })
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement('input', { type: 'text', ref: 'database', placeholder: 'Database' })
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement('input', { type: 'text', ref: 'username', placeholder: 'Username' }),
+	          React.createElement('input', { type: 'password', ref: 'password', placeholder: 'Password' })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'input-button-combo' },
+	          React.createElement('input', {
+	            type: 'text',
+	            ref: 'serverName',
+	            placeholder: 'Name' }),
+	          React.createElement(
+	            'button',
+	            { role: 'submit' },
+	            'Add server'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return DBConnectionManagerAddServer;
+	}(ConnectionManager.AddServerComponent);
+
+	var DBConnectionManager = function (_ConnectionManager) {
+	  _inherits(DBConnectionManager, _ConnectionManager);
+
+	  function DBConnectionManager(props) {
+	    _classCallCheck(this, DBConnectionManager);
+
+	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(DBConnectionManager).call(this, props, '/db'));
+
+	    _this2.serverIcon = "fa-database";
+	    return _this2;
+	  }
+
+	  _createClass(DBConnectionManager, [{
+	    key: 'getAddServerComponent',
+	    value: function getAddServerComponent() {
+	      return DBConnectionManagerAddServer;
+	    }
+	  }]);
+
+	  return DBConnectionManager;
+	}(ConnectionManager);
+
+	module.exports = DBConnectionManager;
+
+/***/ },
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

@@ -105,8 +105,8 @@ class MQTTModule extends EventEmitter {
 
   init() {
     return new Promise((resolve, reject) => {
-      ipc.on('/mqtt/action/connect', (event, scheme, host) => {
-        this.connect(scheme, host);
+      ipc.on('/mqtt/action/connect', (event, server) => {
+        this.connect(server.scheme, server.host);
       });
 
       ipc.on('/mqtt/action/disconnect', (event, arg) => {

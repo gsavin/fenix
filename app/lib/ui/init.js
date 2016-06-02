@@ -1,6 +1,7 @@
 'use strict';
 
-const menu = require('./menu.js');
+const menu    = require('./menu.js')
+    , remote  = require('electron').remote;
 
 (function() {
   var fenix = require('./fenix-ui.js');

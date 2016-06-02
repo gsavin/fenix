@@ -61,8 +61,6 @@ class MQTT extends React.Component {
       sensors: sensors
     });
 
-    console.log(sensors);
-
     this.refs.sensorsList.setState({
       sensors: sensors
     });
@@ -94,8 +92,6 @@ class MQTT extends React.Component {
    *
    */
   componentDidMount() {
-    console.log("mount");
-
     fenix.api.on('/mqtt/sensors', this.onMQTTSensors);
     fenix.api.on('/mqtt/sensor-updated', this.onMQTTSensorUpdated);
 
@@ -110,8 +106,6 @@ class MQTT extends React.Component {
    *
    */
   componentWillUnmount() {
-    console.log("unmount");
-
     fenix.api.removeListener('/mqtt/sensors', this.onMQTTSensors);
     fenix.api.removeListener('/mqtt/sensor-updated', this.onMQTTSensorUpdated);
   }

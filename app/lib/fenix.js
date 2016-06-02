@@ -11,6 +11,7 @@ var fs            = require('fs')
 const MODULES = [
 //  'sensors',
   'mqtt',
+  'db'
 //  'view-utils'
 ];
 

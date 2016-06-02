@@ -1,6 +1,6 @@
 @import '../theme';
 
-.mqtt-connection-manager {
+.connection-manager {
   margin-top: auto;
   margin-bottom: auto;
 
@@ -8,10 +8,11 @@
   height:100%;
 
   background-color: $highlight-color;
+  transition: background-color,0.5s;
 
   //text-align: right;
 
-  .mqtt-status-bar {
+  .status-bar {
     display: flex;
     align-items: center;
 
@@ -103,7 +104,7 @@
     }
   }
 
-  .mqtt-servers {
+  .servers {
     display: none;
     justify-content: flex-end;
     padding: 10px;
@@ -112,13 +113,13 @@
       display: flex;
     }
 
-    .mqtt-server {
+    .server {
       padding: 10px;
       text-align: center;
       color: rgba(0,0,0,0.2);
       width: 85px;
 
-      .mqtt-server-name {
+      .server-name {
         padding: 3px;
       }
 
@@ -127,7 +128,7 @@
       }
     }
 
-    .mqtt-add-server {
+    .add-server {
       align-self: flex-end;
     }
   }
